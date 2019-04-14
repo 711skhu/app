@@ -1,5 +1,6 @@
 package com.shouwn.oj.model.entity.user;
 
+import com.shouwn.oj.model.entity.building.Building;
 import com.shouwn.oj.model.enums.RentDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,8 @@ public class UserRequest {
 
     /*String buildingName;
     String code; //시설 코드*/
+
+    Building building;
 
     RentDate rentDate;
     String reason; //대여 이유
