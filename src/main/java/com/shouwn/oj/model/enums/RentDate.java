@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.entity;
+package com.shouwn.oj.model.enums;
 
 
 import lombok.Getter;
