@@ -1,4 +1,4 @@
-package com.shouwn.oj.repository.builiding;
+package com.shouwn.oj.repository.member;
 
 public interface BuildingRepositoryCustom {
 

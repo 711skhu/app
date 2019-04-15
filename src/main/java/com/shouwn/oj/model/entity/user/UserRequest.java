@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequest {
+public class UserRequest extends User{
 
     /*String buildingName;
     String code; //시설 코드*/

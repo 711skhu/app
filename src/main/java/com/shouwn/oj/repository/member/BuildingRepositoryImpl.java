@@ -1,7 +1,7 @@
-package com.shouwn.oj.repository.builiding.implement;
+package com.shouwn.oj.repository.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shouwn.oj.repository.builiding.BuildingRepositoryCustom;
+import com.shouwn.oj.repository.member.BuildingRepositoryCustom;
 
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 

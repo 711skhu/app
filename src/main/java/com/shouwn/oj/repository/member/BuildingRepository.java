@@ -1,4 +1,4 @@
-package com.shouwn.oj.repository.builiding;
+package com.shouwn.oj.repository.member;
 
 import com.shouwn.oj.model.entity.building.Building;
 import org.springframework.data.jpa.repository.JpaRepository;
