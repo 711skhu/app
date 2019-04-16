@@ -15,7 +15,7 @@ public class UserRequest extends User{
     Building building;
 
     RentDate rentDate;
-    String reason; //대여 이유
-    int number; //대여 인원
-    String  phone;
+    private String reason; //대여 이유
+    private int number; //대여 인원
+    private String  phone;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Building {
 
-    String buildingName; //빌딩 이름
-    String code; //시설 코드
+    private String buildingName; //빌딩 이름
+    private String code; //시설 코드
 
 }

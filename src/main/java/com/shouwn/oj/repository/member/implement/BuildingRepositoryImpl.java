@@ -1,4 +1,4 @@
-package com.shouwn.oj.repository.member;
+package com.shouwn.oj.repository.member.implement;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shouwn.oj.repository.member.BuildingRepositoryCustom;
