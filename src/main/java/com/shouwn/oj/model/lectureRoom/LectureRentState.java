@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.entity.building;
+package com.shouwn.oj.model.lectureRoom;
 
 import com.shouwn.oj.model.enums.RentDate;
 import com.shouwn.oj.model.enums.RentStateType;

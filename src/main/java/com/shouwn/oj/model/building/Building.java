@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.entity.building;
+package com.shouwn.oj.model.building;
 
 import lombok.Getter;
 import lombok.Setter;
