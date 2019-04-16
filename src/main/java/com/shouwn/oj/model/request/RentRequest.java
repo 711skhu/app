@@ -1,5 +1,6 @@
 package com.shouwn.oj.model.request;
 
+import com.shouwn.oj.model.enums.RentDate;
 import com.shouwn.oj.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +12,7 @@ public class RentRequest extends User {
     private String reason; //대여 이유
     private int number; //대여 인원
     private String  phone;
+
+    private  int startTime;
+    private  int endTime;
 }

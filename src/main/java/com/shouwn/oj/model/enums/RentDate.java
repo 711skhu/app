@@ -9,8 +9,8 @@ import java.time.*;
 @MappedSuperclass
 public class RentDate {
 
-    LocalTime start;
-    LocalTime end;
+    int start;
+    int end;
     LocalDate rentDay;
 
 }
