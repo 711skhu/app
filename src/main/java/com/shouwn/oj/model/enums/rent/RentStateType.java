@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum RentStateType {
     //나의 대여현황을 보여주는 리스트
 
-    APPOROVAL,
+    APPROVAL,
     WAIT,
     REFUSE;
 
