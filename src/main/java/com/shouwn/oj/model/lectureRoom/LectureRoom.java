@@ -1,6 +1,5 @@
 package com.shouwn.oj.model.lectureRoom;
 
-import com.shouwn.oj.model.building.Building;
 import com.shouwn.oj.model.enums.lectureRoom.DetailType;
 
 public class LectureRoom{
