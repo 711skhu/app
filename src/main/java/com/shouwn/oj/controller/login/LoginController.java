@@ -1,4 +1,4 @@
-package com.shouwn.oj.controller;
+package com.shouwn.oj.controller.login;
 
 public class LoginController {
     //1.자동로그인을 구현해 줄것인가?

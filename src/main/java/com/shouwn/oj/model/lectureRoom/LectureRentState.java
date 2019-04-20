@@ -1,7 +1,7 @@
 package com.shouwn.oj.model.lectureRoom;
 
-import com.shouwn.oj.model.enums.RentDate;
-import com.shouwn.oj.model.enums.RentStateType;
+import com.shouwn.oj.model.rent.RentDate;
+import com.shouwn.oj.model.enums.rent.RentStateType;
 
 public class LectureRentState {
 

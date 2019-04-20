@@ -1,4 +1,4 @@
-package com.shouwn.oj.controller;
+package com.shouwn.oj.controller.rent;
 
 public class RentController {
     // 빌릴 때 사용하는 Controller
