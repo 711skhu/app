@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.user;
+package com.shouwn.oj.model.request.user;
 
 import lombok.Getter;
 import lombok.Setter;

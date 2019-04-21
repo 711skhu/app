@@ -1,6 +1,5 @@
-package com.shouwn.oj.model.lectureRoom;
+package com.shouwn.oj.model.response.rent;
 
-import com.shouwn.oj.model.rent.RentDate;
 import com.shouwn.oj.model.enums.rent.RentStateType;
 
 public class LectureRentInfo {
