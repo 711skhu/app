@@ -1,9 +1,10 @@
 package com.shouwn.oj.model.request.rent;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RentRequest{
     private String reason; //대여 이유
