@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
-    private String studentNumber;
-    private String password;
+	private String studentNumber;
+	private String password;
 }
