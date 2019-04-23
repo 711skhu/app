@@ -6,5 +6,5 @@ import lombok.Getter;
 public enum RentStateType {
     APPROVAL,
     WAIT,
-    REFUSE;
+    REFUSE
 }
