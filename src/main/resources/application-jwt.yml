@@ -1,0 +1,3 @@
+jwt:
+  secretKey: l87n-uHij5bOdf3EPnT_qfYg31IK93d7LG6giJu4mg_Nz9DcGNMdpg5INW3N5qbbqPeMvqlICopdcKqqOguSNQ
+  expirationMs: 3600000
