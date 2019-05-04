@@ -8,11 +8,11 @@ import com.shouwn.oj.service.member.StudentService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentServiceForMobileLogin {
+public class StudentServiceForMobile {
 
 	private final StudentService studentService;
 
-	public StudentServiceForMobileLogin(StudentService studentService) {
+	public StudentServiceForMobile(StudentService studentService) {
 		this.studentService = studentService;
 	}
 

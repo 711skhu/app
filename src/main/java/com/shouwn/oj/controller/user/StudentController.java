@@ -8,7 +8,7 @@ import com.shouwn.oj.model.response.ApiDataBuilder;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.security.JwtProvider;
-import com.shouwn.oj.service.user.StudentServiceForMobileLogin;
+import com.shouwn.oj.service.user.StudentServiceForMobile;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +22,11 @@ public class StudentController {
 
 	private final JwtProvider jwtProvider;
 
-	private final StudentServiceForMobileLogin studentServiceForMobileLogin;
+	private final StudentServiceForMobile studentServiceForMobile;
 
-	public StudentController(JwtProvider jwtProvider, StudentServiceForMobileLogin studentServiceForMobileLogin) {
+	public StudentController(JwtProvider jwtProvider, StudentServiceForMobile studentServiceForMobile) {
 		this.jwtProvider = jwtProvider;
-		this.studentServiceForMobileLogin = studentServiceForMobileLogin;
+		this.studentServiceForMobile = studentServiceForMobile;
 	}
 
 	@PostMapping("login")
@@ -34,7 +34,7 @@ public class StudentController {
 		Student student;
 
 		try {
-			student = studentServiceForMobileLogin.login(loginRequest.getUsername(), loginRequest.getPassword());
+			student = studentServiceForMobile.login(loginRequest.getUsername(), loginRequest.getPassword());
 		} catch (UsernameNotExistException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.PRECONDITION_FAILED)
