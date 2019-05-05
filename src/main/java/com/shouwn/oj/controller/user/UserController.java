@@ -1,7 +1,5 @@
 package com.shouwn.oj.controller.user;
 
-import java.io.IOException;
-
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
@@ -26,22 +24,16 @@ public class UserController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest) {
-		try {
-			if (userService.login(loginRequest)) {
-				return CommonResponse.builder()
-						.status(HttpStatus.OK)
-						.message("로그인 성공")
-						.build();
-			} else {
-				return CommonResponse.builder()
-						.status(HttpStatus.FORBIDDEN)
-						.message("로그인 실패. 계정 정보 확인 바랍니다.")
-						.build();
-			}
-		} catch (IOException e) {
+
+		if (userService.login(loginRequest)) {
 			return CommonResponse.builder()
-					.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.message("IOException")
+					.status(HttpStatus.OK)
+					.message("로그인 성공")
+					.build();
+		} else {
+			return CommonResponse.builder()
+					.status(HttpStatus.FORBIDDEN)
+					.message("로그인 실패. 계정 정보 확인 바랍니다.")
 					.build();
 		}
 	}
