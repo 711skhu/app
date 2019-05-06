@@ -27,3 +27,6 @@ querydsl/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### propertis ###
+application-jwt.yml
