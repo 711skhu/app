@@ -1,3 +1,6 @@
 dependencies {
 
+    // htmlUnit
+    compile 'net.sourceforge.htmlunit:htmlunit:2.34.1'
+
 }

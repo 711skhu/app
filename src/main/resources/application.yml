@@ -1,4 +1,5 @@
 spring:
   profiles:
     include:
-    - core
+      - core
+      - jwt
