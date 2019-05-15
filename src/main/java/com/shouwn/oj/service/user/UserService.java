@@ -23,6 +23,8 @@ public class UserService {
 
 			WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
 			webClient.getOptions().setUseInsecureSSL(true);
+			webClient.getOptions().setJavaScriptEnabled(false);
+			webClient.getOptions().setCssEnabled(false);
 
 			HtmlPage loginPage = webClient.getPage(loginPageUrl);
 			HtmlForm loginForm = loginPage.getFormByName("");
@@ -30,8 +32,11 @@ public class UserService {
 			loginForm.getInputByName("txtPW").setValueAttribute(loginRequest.getPassword());
 
 			HtmlPage mainPage = loginForm.getInputByName("ibtnLogin").click();
-			if (mainPageUrl.equals(mainPage.getBaseURL())) return true;
-			else return false;
+			if (mainPageUrl.equals(mainPage.getBaseURL())) {
+				return true;
+			} else {
+				return false;
+			}
 
 		} catch (IOException e) {
 			return ExceptionUtils.rethrow(e);

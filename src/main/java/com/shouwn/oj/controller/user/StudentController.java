@@ -9,6 +9,7 @@ import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.security.JwtProvider;
 import com.shouwn.oj.service.user.StudentServiceForMobile;
+import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,13 @@ public class StudentController {
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody MemberLoginRequest loginRequest) {
 		Student student;
+
+		if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
+			return CommonResponse.builder()
+					.status(HttpStatus.PRECONDITION_FAILED)
+					.message("아이디 혹은 비밀번호를 입력해주세요.")
+					.build();
+		}
 
 		try {
 			student = studentServiceForMobile.login(loginRequest.getUsername(), loginRequest.getPassword());

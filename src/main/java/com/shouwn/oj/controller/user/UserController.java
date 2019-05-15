@@ -4,6 +4,7 @@ import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +26,16 @@ public class UserController {
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest) {
 
+		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
+			return CommonResponse.builder()
+					.status(HttpStatus.PRECONDITION_FAILED)
+					.message("아이디 혹은 비밀번호를 입력해주세요.")
+					.build();
+		}
+
 		if (userService.login(loginRequest)) {
 			return CommonResponse.builder()
-					.status(HttpStatus.OK)
+					.status(HttpStatus.CREATED)
 					.message("로그인 성공")
 					.build();
 		} else {
