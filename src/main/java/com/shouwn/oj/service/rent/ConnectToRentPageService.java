@@ -1,9 +1,10 @@
 package com.shouwn.oj.service.rent;
 
 import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.shouwn.oj.model.BasicSetting;
+import com.shouwn.oj.model.UrlSetting;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.springframework.stereotype.Service;
@@ -11,47 +12,45 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConnectToRentPageService {
 
-	static void connectToRentPage() {
+	public int connectToRentPage(HttpSession session) {
 		try {
-			BasicSetting basicSetting = new BasicSetting();
+			UrlSetting urlSetting = new UrlSetting();
+			HtmlPage uniMyMainPage = (HtmlPage) session.getAttribute("htmlPage");
+			if (!urlSetting.getMainPageUrl().equals(uniMyMainPage.getUrl())) {
+				return -1;
+			}
 
-			HtmlPage mainPage = getMainFrameBody(basicSetting.getHtmlPage());
+			HtmlPage mainPage = getPage(uniMyMainPage);
 			getLeftFrameBody(mainPage);
-//			getMainFrameBody(mainPage);
+			HtmlPage contentPage = getPage(mainPage);
 
-			HtmlElement mainFrameset = mainPage.getBody();
-			DomNode contentFrameNode = mainFrameset.getLastChild().getPreviousSibling();
-			HtmlFrame contentFrame = (HtmlFrame) contentFrameNode;
-//			FrameWindow fw01 = (FrameWindow) fr01.getEnclosedWindow();
-			HtmlPage contentPage = (HtmlPage) contentFrame.getEnclosedPage();
-//			System.out.println("p01 " + p01.asXml());
-
-			basicSetting.setHtmlPage(contentPage);
+			session.setAttribute("htmlPage", contentPage);
+			HtmlPage rentPage = (HtmlPage) session.getAttribute("htmlPage");
+			if (urlSetting.getRentPageUrl().equals(rentPage.getUrl())) {
+				return 1;
+			} else {
+				return 0;
+			}
 
 		} catch (IOException e) {
-			ExceptionUtils.rethrow(e);
+			return ExceptionUtils.rethrow(e);
 		}
 	}
 
-	static HtmlPage getMainFrameBody(HtmlPage uniMyMainPage) {
-		HtmlElement frmFrameset = uniMyMainPage.getBody();
-		DomNode mainFrameNode = frmFrameset.getLastChild().getPreviousSibling();
-		HtmlFrame mainFrame = (HtmlFrame) mainFrameNode;
-//			FrameWindow fw0 = (FrameWindow) contentFrame.getEnclosedWindow();
-		HtmlPage mainFrameBody = (HtmlPage) mainFrame.getEnclosedPage();
-//			System.out.println("p0 "+p0.asXml());
+	static HtmlPage getPage(HtmlPage mainPage) {
+		HtmlElement frameset = mainPage.getBody();
+		DomNode frameNode = frameset.getLastChild().getPreviousSibling();
+		HtmlFrame frame = (HtmlFrame) frameNode;
+		HtmlPage page = (HtmlPage) frame.getEnclosedPage();
 
-		return mainFrameBody;
+		return page;
 	}
 
 	static void getLeftFrameBody(HtmlPage mainPage) throws IOException {
 		HtmlElement mainFrameset = mainPage.getBody();
 		DomNode leftFrameNode = mainFrameset.getFirstChild().getNextSibling();
 		HtmlFrame leftFrame = (HtmlFrame) leftFrameNode;
-//		FrameWindow fw2 = (FrameWindow) fr2.getEnclosedWindow();
 		HtmlPage leftFrameBody = (HtmlPage) leftFrame.getEnclosedPage();
-//		System.out.println("p2 " + p2.asXml());
-
 		clickMenu(leftFrameBody);
 
 		return;
@@ -60,7 +59,6 @@ public class ConnectToRentPageService {
 	static void clickMenu(HtmlPage leftPage) throws IOException {
 		HtmlAnchor webServiceAnchor = leftPage.getAnchorByText("웹서비스");
 		leftPage = webServiceAnchor.click();
-//		System.out.println("p22 " + p2.asXml());
 		HtmlAnchor rentPageAnchor = leftPage.getAnchorByText("[N]시설물대여 신청");
 		rentPageAnchor.click();
 

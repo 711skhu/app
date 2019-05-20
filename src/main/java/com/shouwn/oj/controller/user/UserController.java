@@ -1,5 +1,7 @@
 package com.shouwn.oj.controller.user;
 
+import javax.servlet.http.HttpSession;
+
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
@@ -22,9 +24,11 @@ public class UserController {
 		this.userService = userService;
 	}
 
-//	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
-	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest) {
+	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
+
+		session.setAttribute("htmlPage", null);
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
 			return CommonResponse.builder()
@@ -33,7 +37,7 @@ public class UserController {
 					.build();
 		}
 
-		if (userService.login(loginRequest)) {
+		if (userService.login(loginRequest, session)) {
 			return CommonResponse.builder()
 					.status(HttpStatus.CREATED)
 					.message("로그인 성공")
