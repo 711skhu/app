@@ -37,7 +37,7 @@ public class ConnectToRentPageService {
 		}
 	}
 
-	static HtmlPage getPage(HtmlPage mainPage) {
+	private HtmlPage getPage(HtmlPage mainPage) {
 		HtmlElement frameset = mainPage.getBody();
 		DomNode frameNode = frameset.getLastChild().getPreviousSibling();
 		HtmlFrame frame = (HtmlFrame) frameNode;
@@ -46,7 +46,7 @@ public class ConnectToRentPageService {
 		return page;
 	}
 
-	static void getLeftFrameBody(HtmlPage mainPage) throws IOException {
+	private void getLeftFrameBody(HtmlPage mainPage) throws IOException {
 		HtmlElement mainFrameset = mainPage.getBody();
 		DomNode leftFrameNode = mainFrameset.getFirstChild().getNextSibling();
 		HtmlFrame leftFrame = (HtmlFrame) leftFrameNode;
@@ -56,7 +56,7 @@ public class ConnectToRentPageService {
 		return;
 	}
 
-	static void clickMenu(HtmlPage leftPage) throws IOException {
+	private void clickMenu(HtmlPage leftPage) throws IOException {
 		HtmlAnchor webServiceAnchor = leftPage.getAnchorByText("웹서비스");
 		leftPage = webServiceAnchor.click();
 		HtmlAnchor rentPageAnchor = leftPage.getAnchorByText("[N]시설물대여 신청");

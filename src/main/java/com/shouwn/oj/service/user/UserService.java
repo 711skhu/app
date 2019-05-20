@@ -24,6 +24,8 @@ public class UserService {
 
 	public boolean login(UserLoginRequest loginRequest, HttpSession session) {
 		try {
+			session.setAttribute("htmlPage", null);
+
 			UrlSetting urlSetting = new UrlSetting();
 			final WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
 			webClient.getOptions().setUseInsecureSSL(true);

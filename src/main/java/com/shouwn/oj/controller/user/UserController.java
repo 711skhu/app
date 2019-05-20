@@ -28,8 +28,6 @@ public class UserController {
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 
-		session.setAttribute("htmlPage", null);
-
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
 			return CommonResponse.builder()
 					.status(HttpStatus.PRECONDITION_FAILED)
