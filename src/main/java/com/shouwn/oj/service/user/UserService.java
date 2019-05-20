@@ -9,18 +9,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.model.UrlSetting;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
-import com.shouwn.oj.service.rent.ConnectToRentPageService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-	private final ConnectToRentPageService connectToRentPageService;
-
-	public UserService(ConnectToRentPageService connectToRentPageService) {
-		this.connectToRentPageService = connectToRentPageService;
-	}
 
 	public boolean login(UserLoginRequest loginRequest, HttpSession session) {
 		try {
