@@ -1,5 +1,9 @@
 package com.shouwn.oj.controller.user;
 
+import javax.servlet.http.HttpSession;
+
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.shouwn.oj.exception.user.LoginException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
@@ -24,7 +28,10 @@ public class UserController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
-	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest) {
+	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
+
+		session.setAttribute("htmlPage", null);
+		HtmlPage mainPage;
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
 			return CommonResponse.builder()
@@ -33,16 +40,20 @@ public class UserController {
 					.build();
 		}
 
-		if (userService.login(loginRequest)) {
-			return CommonResponse.builder()
-					.status(HttpStatus.CREATED)
-					.message("로그인 성공")
-					.build();
-		} else {
+		try {
+			mainPage = userService.login(loginRequest);
+		} catch (LoginException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
-					.message("로그인 실패. 계정 정보 확인 바랍니다.")
+					.message(e.getMessage())
 					.build();
 		}
+
+		session.setAttribute("htmlPage", mainPage);
+		return CommonResponse.builder()
+				.status(HttpStatus.CREATED)
+				.message("로그인 성공")
+				.build();
 	}
+
 }
