@@ -2,6 +2,8 @@ package com.shouwn.oj.controller.rent;
 
 import javax.servlet.http.HttpSession;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.shouwn.oj.exception.rent.RentException;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
@@ -24,24 +26,23 @@ public class RentController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
-		int responseCode = connectToRentPageService.connectToRentPage(session);
 
-		switch (responseCode) {
-			case -1:
-				return CommonResponse.builder()
-						.status(HttpStatus.FORBIDDEN)
-						.message("잘못된 접근입니다.")
-						.build();
-			case 1:
-				return CommonResponse.builder()
-						.status(HttpStatus.OK)
-						.message("연결 성공")
-						.build();
-			default:
-				return CommonResponse.builder()
-						.status(HttpStatus.INTERNAL_SERVER_ERROR)
-						.message("연결 실패")
-						.build();
+		HtmlPage htmlPage = (HtmlPage) session.getAttribute("htmlPage");
+
+		try {
+			htmlPage = connectToRentPageService.connectToRentPage(htmlPage);
+		} catch (RentException e) {
+			return CommonResponse.builder()
+					.status(HttpStatus.FORBIDDEN)
+					.message(e.getMessage())
+					.build();
 		}
+
+		session.setAttribute("htmlPage", htmlPage);
+		return CommonResponse.builder()
+				.status(HttpStatus.OK)
+				.message("연결 성공")
+				.build();
 	}
+
 }

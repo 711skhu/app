@@ -1,10 +1,10 @@
 package com.shouwn.oj.service.rent;
 
 import java.io.IOException;
-import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.shouwn.oj.model.UrlSetting;
+import com.shouwn.oj.exception.rent.RentException;
+import com.shouwn.oj.model.enums.user.UrlType;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.springframework.stereotype.Service;
@@ -12,24 +12,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConnectToRentPageService {
 
-	public int connectToRentPage(HttpSession session) {
+	public HtmlPage connectToRentPage(HtmlPage uniMyMainPage) {
 		try {
-			UrlSetting urlSetting = new UrlSetting();
-			HtmlPage uniMyMainPage = (HtmlPage) session.getAttribute("htmlPage");
-			if (!urlSetting.getMainPageUrl().equals(uniMyMainPage.getUrl())) {
-				return -1;
+			if (!UrlType.MainPageURL.getUrl().equals(uniMyMainPage.getUrl())) {
+				throw new RentException("잘못된 접근 입니다.");
 			}
 
 			HtmlPage mainPage = getPage(uniMyMainPage);
 			getLeftFrameBody(mainPage);
 			HtmlPage contentPage = getPage(mainPage);
 
-			session.setAttribute("htmlPage", contentPage);
-			HtmlPage rentPage = (HtmlPage) session.getAttribute("htmlPage");
-			if (urlSetting.getRentPageUrl().equals(rentPage.getUrl())) {
-				return 1;
+			if (UrlType.RentPageURL.getUrl().equals(contentPage.getUrl())) {
+				return contentPage;
 			} else {
-				return 0;
+				throw new RentException("연결 실패");
 			}
 
 		} catch (IOException e) {
