@@ -27,7 +27,7 @@ public class RentController {
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
 
-		HtmlPage htmlPage = (HtmlPage) session.getAttribute("htmlPage");
+		HtmlPage htmlPage = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
 			htmlPage = connectToRentPageService.connectToRentPage(htmlPage);
@@ -38,7 +38,7 @@ public class RentController {
 					.build();
 		}
 
-		session.setAttribute("htmlPage", htmlPage);
+		session.setAttribute("rentPage", htmlPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("연결 성공")
