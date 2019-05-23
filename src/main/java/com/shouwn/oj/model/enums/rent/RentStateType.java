@@ -4,7 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum RentStateType {
-	APPROVAL,
-	WAIT,
-	REFUSE
+	승인, 신청, 반려
 }
