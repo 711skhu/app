@@ -1,12 +1,13 @@
 package com.shouwn.oj.service.user;
 
 import java.io.IOException;
-import java.net.URL;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.shouwn.oj.exception.user.LoginException;
+import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -15,23 +16,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	public boolean login(UserLoginRequest loginRequest) {
+	public HtmlPage login(UserLoginRequest loginRequest) {
 		try {
-			final URL forestBaseUrl = new URL("https://forest.skhu.ac.kr");
-			final URL loginPageUrl = new URL(forestBaseUrl + "/Gate/UniLogin.aspx");
-			final URL mainPageUrl = new URL(forestBaseUrl + "/Gate/UniMyMain.aspx");
-
-			WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
+			final WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
 			webClient.getOptions().setUseInsecureSSL(true);
+			webClient.getOptions().setJavaScriptEnabled(true);
+			webClient.getOptions().setCssEnabled(false);
 
-			HtmlPage loginPage = webClient.getPage(loginPageUrl);
+			HtmlPage loginPage = webClient.getPage(UrlType.LoginPageURL.getUrl());
 			HtmlForm loginForm = loginPage.getFormByName("");
 			loginForm.getInputByName("txtID").setValueAttribute(loginRequest.getStudentNumber());
 			loginForm.getInputByName("txtPW").setValueAttribute(loginRequest.getPassword());
 
 			HtmlPage mainPage = loginForm.getInputByName("ibtnLogin").click();
-			if (mainPageUrl.equals(mainPage.getBaseURL())) return true;
-			else return false;
+
+			if (!UrlType.MainPageURL.getUrl().equals(mainPage.getUrl())) {
+				throw new LoginException("로그인 실패. 계정 정보 확인 바랍니다.");
+			}
+			return mainPage;
 
 		} catch (IOException e) {
 			return ExceptionUtils.rethrow(e);
