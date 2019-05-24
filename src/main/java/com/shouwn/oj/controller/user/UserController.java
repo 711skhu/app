@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.rent.RentException;
-import com.shouwn.oj.exception.rent.RentListIsEmptyException;
 import com.shouwn.oj.exception.user.LoginException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
@@ -71,11 +70,6 @@ public class UserController {
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		} catch (RentListIsEmptyException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.NO_CONTENT)
 					.message(e.getMessage())
 					.build();
 		}

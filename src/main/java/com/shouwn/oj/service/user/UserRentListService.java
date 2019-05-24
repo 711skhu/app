@@ -7,7 +7,6 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.shouwn.oj.exception.rent.RentException;
-import com.shouwn.oj.exception.rent.RentListIsEmptyException;
 import com.shouwn.oj.model.enums.rent.RentStateType;
 import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.response.rent.LectureRentInfo;
@@ -34,10 +33,6 @@ public class UserRentListService {
 			RentDate rentDate = new RentDate(rowRentDate.charAt(13) - '0', (rowRentDate.charAt(20) - '0') + 1, LocalDate.parse(rowRentDate.substring(0, 10)));
 
 			rentList.add(new LectureRentInfo(rentDate, rentStateType, lectureCode));
-		}
-
-		if (rentList.isEmpty()) {
-			throw new RentListIsEmptyException("대여 내역이 존재하지 않습니다.");
 		}
 
 		return rentList;
