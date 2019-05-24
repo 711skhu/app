@@ -1,6 +1,5 @@
 package com.shouwn.oj.model.response.rent;
 
-import com.shouwn.oj.model.enums.rent.RentStateType;
 import lombok.*;
 
 @Getter
@@ -8,13 +7,13 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LectureRentInfo {
 	private RentDate rentDate;
-	private RentStateType rentStateType;
+	private String rentState;
 	private String lectureCode;
 
 	@Builder
-	public LectureRentInfo(RentDate rentDate, RentStateType rentStateType, String lectureCode) {
+	public LectureRentInfo(RentDate rentDate, String rentState, String lectureCode) {
 		this.rentDate = rentDate;
-		this.rentStateType = rentStateType;
+		this.rentState = rentState;
 		this.lectureCode = lectureCode;
 	}
 }
