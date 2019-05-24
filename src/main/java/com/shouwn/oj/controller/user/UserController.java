@@ -30,7 +30,7 @@ public class UserController {
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 
-		session.setAttribute("htmlPage", null);
+		session.setAttribute("rentPage", null);
 		HtmlPage mainPage;
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
@@ -49,7 +49,7 @@ public class UserController {
 					.build();
 		}
 
-		session.setAttribute("htmlPage", mainPage);
+		session.setAttribute("rentPage", mainPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.CREATED)
 				.message("로그인 성공")
