@@ -1,7 +1,6 @@
 package com.shouwn.oj.controller.user;
 
-import com.shouwn.oj.exception.member.PasswordIncorrectException;
-import com.shouwn.oj.exception.member.UsernameNotExistException;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.entity.member.Student;
 import com.shouwn.oj.model.request.member.MemberLoginRequest;
 import com.shouwn.oj.model.response.ApiDataBuilder;
@@ -35,25 +34,10 @@ public class StudentController {
 		Student student;
 
 		if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
-			return CommonResponse.builder()
-					.status(HttpStatus.PRECONDITION_FAILED)
-					.message("아이디 혹은 비밀번호를 입력해주세요.")
-					.build();
+			throw new InvalidParameterException("아이디 혹은 비밀번호를 입력해주세요.");
 		}
 
-		try {
-			student = studentServiceForMobile.login(loginRequest.getUsername(), loginRequest.getPassword());
-		} catch (UsernameNotExistException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.PRECONDITION_FAILED)
-					.message(loginRequest.getUsername() + " 에 해당하는 사용자 아이디가 없습니다.")
-					.build();
-		} catch (PasswordIncorrectException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message("비밀번호가 다릅니다.")
-					.build();
-		}
+		student = studentServiceForMobile.login(loginRequest.getUsername(), loginRequest.getPassword());
 
 		String jwt = jwtProvider.generateJwt(student.getId());
 
