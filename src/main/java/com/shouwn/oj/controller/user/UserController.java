@@ -26,7 +26,7 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	/*@PreAuthorize("isAuthenticated()")*/
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 

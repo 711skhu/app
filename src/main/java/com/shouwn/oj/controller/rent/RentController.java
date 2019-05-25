@@ -4,6 +4,8 @@ import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.rent.RentException;
+import com.shouwn.oj.model.request.rent.BuildingRequest;
+import com.shouwn.oj.model.request.rent.ClassRoomRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
@@ -11,9 +13,7 @@ import com.shouwn.oj.service.rent.ConnectToRentPageService;
 import com.shouwn.oj.service.rent.LectureRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("rent")
@@ -26,7 +26,7 @@ public class RentController {
 		this.lectureRoomService = lectureRoomService;
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	/*@PreAuthorize("isAuthenticated()")*/
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
 
@@ -48,32 +48,31 @@ public class RentController {
 				.build();
 	}
 
-	/*@GetMapping("buildingList")
-	public ApiResponse<?> BuildingClick(HttpSession session) {
-		HtmlPage htmlPage = (HtmlPage) session.getAttribute("htmlPage");
+	@GetMapping("buildingList")
+	public ApiResponse<?> BuildingClick(@RequestBody BuildingRequest buildingName, HttpSession session) {
+		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
-			htmlPage = (HtmlPage) LectureRoomService.building(htmlPage);
+			rentPage = (HtmlPage) lectureRoomService.building(rentPage, buildingName);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
 					.build();
 		}
-
-		session.setAttribute("htmlPage", htmlPage);
+		session.setAttribute("rentPage", rentPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("빌딩 클릭 성공")
 				.build();
 	}
 
-	@GetMapping("classRoomList")
+	/*@GetMapping("classRoomList")
 	public ApiResponse<?> LectureRoomClick(HttpSession session) {
-		HtmlPage htmlPage = (HtmlPage) session.getAttribute("htmlPage");
+		HtmlPage htmlPage = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
-			htmlPage = (HtmlPage) LectureRoomService.building(htmlPage);
+			htmlPage = (HtmlPage) LectureRoomService.classRoom(htmlPage);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
@@ -81,7 +80,7 @@ public class RentController {
 					.build();
 		}
 
-		session.setAttribute("htmlPage", htmlPage);
+		session.setAttribute("rentPage", htmlPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("강의실 클릭 성공")
