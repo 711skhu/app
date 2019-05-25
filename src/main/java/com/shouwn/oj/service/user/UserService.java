@@ -26,6 +26,7 @@ public class UserService {
 			HtmlPage loginPage = webClient.getPage(UrlType.LoginPageURL.getUrl());
 			HtmlForm loginForm = loginPage.getFormByName("");
 			loginForm.getInputByName("txtID").setValueAttribute(loginRequest.getStudentNumber());
+			System.out.println("ID" + loginRequest.getStudentNumber());
 			loginForm.getInputByName("txtPW").setValueAttribute(loginRequest.getPassword());
 
 			HtmlPage mainPage = loginForm.getInputByName("ibtnLogin").click();

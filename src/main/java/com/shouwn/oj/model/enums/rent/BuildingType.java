@@ -1,7 +1,5 @@
 package com.shouwn.oj.model.enums.rent;
 
-import java.util.Arrays;
-import java.util.List;
 import lombok.Getter;
 
 @Getter

@@ -15,8 +15,8 @@ import static com.shouwn.oj.model.enums.rent.BuildingType.*;
 
 @Service
 public class LectureRoomService {
-	//건물 목록 출력
-	public HtmlPage building(HtmlPage rentPage, BuildingRequest buildingName) {
+
+	public HtmlPage selectBuilding(HtmlPage rentPage, BuildingRequest buildingName) {
 		List<HtmlElement> buildingList1;
 		buildingList1 = rentPage.getByXPath("//table[@id='gv건물목록']/tbody/tr[@class='cssRowStyle']/td[1]");
 
@@ -40,9 +40,65 @@ public class LectureRoomService {
 			}
 		}
 		try {
-			System.out.println("try가 시작됩니다.");
-			System.out.println("buildingName: "+ buildingName );
+			System.out.println("buildingName: "+ buildingName.getBuildingName() );
 			clickBuilding(rentPage, buildingName);
+			return rentPage;
+		}
+		catch (IOException e) {
+			return ExceptionUtils.rethrow(e);
+		}
+	}
+
+	private static void clickBuilding(HtmlPage rentPage, BuildingRequest inputName) throws IOException {
+		System.out.println("clickBuilding을 클릭했다. ");
+		HtmlAnchor link = null;
+		List<HtmlAnchor> anchors = rentPage.getAnchors();
+		for (HtmlAnchor anchor : anchors) {
+			String str = anchor.getId();
+			if (inputName.getBuildingName().equals(SeungyeonHall.getBuildingName())) {
+				    str =SeungyeonHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+				if (inputName.getBuildingName().equals(IlmanHall.getBuildingName())) {
+					str =IlmanHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+				if(inputName.getBuildingName().equals(WoldanggHall.getBuildingName())) {
+					str = WoldanggHall.getBuildingButton();
+					link = anchor;
+				}
+				if (inputName.getBuildingName().equals(LeechunhwanHall.getBuildingName())) {
+					str =LeechunhwanHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+				if(inputName.getBuildingName().equals(SsechunnunHall.getBuildingName())) {
+					str =SsechunnunHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+				if(inputName.getBuildingName().equals(SungmieleHall.getBuildingName())) {
+					str =SungmieleHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+				if(inputName.getBuildingName().equals(MieleHall.getBuildingName())) {
+					str =MieleHall.getBuildingButton();
+					link = anchor;
+					break;
+				}
+			}
+			 link.click();
+			System.out.println("클릭했다.");
+
+			return;
+		}
+
+	public HtmlPage selectClassRoom(HtmlPage rentPage, ClassRoomRequest classRoomName) {
+
+		try {
 			List<HtmlElement> classroomList1;
 			classroomList1 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssRowStyle']/td[1]");
 			List<HtmlElement> classroomListNum1;
@@ -69,78 +125,15 @@ public class LectureRoomService {
 					break;
 				}
 			}
-			return rentPage;
-		}
-		catch (IOException e) {
-			return ExceptionUtils.rethrow(e);
-		}
+			clickClassRoom(rentPage, classRoomName);
+
+		}catch (IOException e) {
+		return ExceptionUtils.rethrow(e);
 	}
-
-	private static void clickBuilding(HtmlPage rentPage, BuildingRequest inputName) throws IOException {
-
-		HtmlAnchor link = null;
-		List<HtmlAnchor> anchors = rentPage.getAnchors();
-		for (HtmlAnchor anchor : anchors) {
-			String str = anchor.getId();
-			if (SeungyeonHall.getBuildingName().equals(inputName)) {
-				if (anchor.getId().equals(SeungyeonHall.getBuildingButton())) {
-					link = anchor;
-				}
-				if (Objects.equals(IlmanHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(IlmanHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-				if (Objects.equals(WoldanggHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(WoldanggHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-				if (Objects.equals(LeechunhwanHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(LeechunhwanHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-				if (Objects.equals(SsechunnunHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(SsechunnunHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-				if (Objects.equals(SungmieleHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(SungmieleHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-				if (Objects.equals(MieleHall.getBuildingName(), inputName)) {
-					if (anchor.getId().equals(MieleHall.getBuildingButton())) {
-						link = anchor;
-					}
-				}
-			}
-			System.out.println("클릭할 것이다.");
-			link.click();
-			System.out.println("클릭했다.");
-			return;
-		}
-	}
-	/*public static HtmlPage classRoom(HtmlPage rentPage) {
-
-		try {
-			clickClassRoom(rentPage);
-			List<HtmlElement> approveList;
-			approveList = rentPage.getByXPath("//table[@id='gv시설대여현황']/tbody/tr[@class='cssRowStyle']/td[1]");
-			List<HtmlElement> approveTimeList;
-			approveTimeList = rentPage.getByXPath("//table[@id='gv시설대여현황']/tbody/tr[@class='cssRowStyle']/td[2]");
-			for (int k = 0; k < approveList.size(); k++) {
-				System.out.println(" 대여상태 : " + approveList.get(k).asText() + "    대여시간 :" + approveTimeList.get(k).asText());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return rentPage;
 	}
 
-	private static void clickClassRoom(HtmlPage rentPage) throws IOException {
+	private static void clickClassRoom(HtmlPage rentPage, ClassRoomRequest inputName) throws IOException {
 		HtmlAnchor link = null;
 		List<HtmlAnchor> anchors = rentPage.getAnchors(); //강의실 버튼
 		for (HtmlAnchor anchor : anchors) {
@@ -200,6 +193,6 @@ public class LectureRoomService {
 		}
 		link.click();
 		return;
-	}*/
+	}
 
 }

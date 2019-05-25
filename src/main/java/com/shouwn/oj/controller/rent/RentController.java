@@ -50,17 +50,17 @@ public class RentController {
 
 	@GetMapping("buildingList")
 	public ApiResponse<?> BuildingClick(@RequestBody BuildingRequest buildingName, HttpSession session) {
-		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
+		HtmlPage rentPage1 = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
-			rentPage = (HtmlPage) lectureRoomService.building(rentPage, buildingName);
+			rentPage1 = (HtmlPage) lectureRoomService.selectBuilding(rentPage1, buildingName);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
 					.build();
 		}
-		session.setAttribute("rentPage", rentPage);
+		session.setAttribute("rentPage", rentPage1);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("빌딩 클릭 성공")
