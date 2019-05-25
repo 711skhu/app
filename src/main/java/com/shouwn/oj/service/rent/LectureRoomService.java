@@ -7,7 +7,6 @@ import com.shouwn.oj.model.request.rent.BuildingRequest;
 import com.shouwn.oj.model.request.rent.ClassRoomRequest;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
@@ -95,34 +94,34 @@ public class LectureRoomService {
 		}
 
 	public HtmlPage selectClassRoom(HtmlPage rentPage, ClassRoomRequest classRoomName) {
-		List<HtmlElement> classroomList1;
-		classroomList1 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssRowStyle']/td[1]");
-		List<HtmlElement> classroomListNum1;
-		classroomListNum1 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssRowStyle']/td[3]");
 
-		List<HtmlElement> classroomList2;
-		classroomList2 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssAlternatingRowStyle']/td[1]");
-		List<HtmlElement> classroomListNum2;
-		classroomListNum2 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssAlternatingRowStyle']/td[3]");
-
-		System.out.println("*******************************************");
-		int check = 0;
-		for (int j = 0; j < (classroomList2.size() + classroomList1.size()); j++) {
-			if (check % 2 == 0) {
-				System.out.println(classroomList1.get(j).asText() + " 인원수 :" + classroomListNum1.get(j).asText());
-				++check;
-			}
-			else {
-				--j;
-				System.out.println(classroomList2.get(j).asText() + " 인원수 :" + classroomListNum2.get(j).asText());
-				++check;
-			}
-			if (check == 10) {
-				break;
-			}
-		}
 		try {
-			System.out.println("try를 시작한다. ");
+			List<HtmlElement> classroomList1;
+			classroomList1 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssRowStyle']/td[1]");
+			List<HtmlElement> classroomListNum1;
+			classroomListNum1 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssRowStyle']/td[3]");
+
+			List<HtmlElement> classroomList2;
+			classroomList2 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssAlternatingRowStyle']/td[1]");
+			List<HtmlElement> classroomListNum2;
+			classroomListNum2 = rentPage.getByXPath("//table[@id='gv시설목록']/tbody/tr[@class='cssAlternatingRowStyle']/td[3]");
+
+			System.out.println("*******************************************");
+			int check = 0;
+			for (int j = 0; j < (classroomList2.size() + classroomList1.size()); j++) {
+				if (check % 2 == 0) {
+					System.out.println(classroomList1.get(j).asText() + " 인원수 :" + classroomListNum1.get(j).asText());
+					++check;
+				}
+				else {
+					--j;
+					System.out.println(classroomList2.get(j).asText() + " 인원수 :" + classroomListNum2.get(j).asText());
+					++check;
+				}
+				if (check == 10) {
+					break;
+				}
+			}
 			clickClassRoom(rentPage, classRoomName);
 
 		}catch (IOException e) {
@@ -132,7 +131,7 @@ public class LectureRoomService {
 	}
 
 	private static void clickClassRoom(HtmlPage rentPage, ClassRoomRequest inputName) throws IOException {
-		System.out.println("clickClassRoom을 클릭했다. ");
+
 		HtmlAnchor link = null;
 		List<HtmlAnchor> anchors = rentPage.getAnchors();
 		for (HtmlAnchor anchor : anchors) {
