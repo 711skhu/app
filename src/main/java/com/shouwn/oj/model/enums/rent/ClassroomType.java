@@ -67,13 +67,13 @@ public enum ClassroomType {
 	MieleHall_M406("M406","gv시설목록_ctl12_btnSelect", DetailType.PROJECTOR, DetailType.MIDDLE),
 	MieleHall_M407("M407","gv시설목록_ctl13_btnSelect", DetailType.PROJECTOR, DetailType.MIDDLE);
 
-	private String classroom;
+	private String classroomName;
 	private String button;
 	private DetailType detailType;
 	private DetailType classType;
 
-	ClassroomType(String classroom, String button, DetailType detailType, DetailType classType) {
-		this.classroom = classroom;
+	ClassroomType(String classroomName, String button, DetailType detailType, DetailType classType) {
+		this.classroomName = classroomName;
 		this.button = button;
 		this.detailType = detailType;
 		this.classType = classType;

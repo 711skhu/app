@@ -18,12 +18,10 @@ public enum BuildingType {
 
 	private String buildingName;
 	private String buildingButton;
-	/*private List<String> clasroomList;*/
 
-	BuildingType(String buildingName, String buildingButton /*,List<String> classroomList*/) {
+	BuildingType(String buildingName, String buildingButton ) {
 		this.buildingName = buildingName;
 		this.buildingButton = buildingButton;
-		/*this.clasroomList = classroomList;*/
 	}
 
 }

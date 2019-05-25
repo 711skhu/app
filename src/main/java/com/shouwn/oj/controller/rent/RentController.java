@@ -26,7 +26,7 @@ public class RentController {
 		this.lectureRoomService = lectureRoomService;
 	}
 
-	/*@PreAuthorize("isAuthenticated()")*/
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
 
@@ -67,25 +67,25 @@ public class RentController {
 				.build();
 	}
 
-	/*@GetMapping("classRoomList")
-	public ApiResponse<?> LectureRoomClick(HttpSession session) {
-		HtmlPage htmlPage = (HtmlPage) session.getAttribute("rentPage");
+	@GetMapping("classRoomList")
+	public ApiResponse<?> ClassRoomClick(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
+		HtmlPage rentPage2 = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
-			htmlPage = (HtmlPage) LectureRoomService.classRoom(htmlPage);
+			System.out.println("classRoomList");
+			rentPage2 = (HtmlPage) lectureRoomService.selectClassRoom(rentPage2, classRoomName);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
 					.build();
 		}
-
-		session.setAttribute("rentPage", htmlPage);
+		session.setAttribute("rentPage", rentPage2);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("강의실 클릭 성공")
 				.build();
-	}*/
+	}
 }
 
 	/* <URI>
