@@ -48,6 +48,7 @@ public class RentController {
 				.build();
 	}
 
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("buildingList")
 	public ApiResponse<?> BuildingClick(@RequestBody BuildingRequest buildingName, HttpSession session) {
 		HtmlPage rentPage1 = (HtmlPage) session.getAttribute("rentPage");
@@ -67,6 +68,7 @@ public class RentController {
 				.build();
 	}
 
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("classRoomList")
 	public ApiResponse<?> ClassRoomClick(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
 		HtmlPage rentPage2 = (HtmlPage) session.getAttribute("rentPage");
