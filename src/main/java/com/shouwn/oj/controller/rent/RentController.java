@@ -1,7 +1,5 @@
 package com.shouwn.oj.controller.rent;
 
-import javax.servlet.http.HttpSession;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.rent.RentException;
 import com.shouwn.oj.model.request.rent.BuildingRequest;
@@ -9,11 +7,15 @@ import com.shouwn.oj.model.request.rent.ClassRoomRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
-
 import com.shouwn.oj.service.rent.LectureRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("rent")
@@ -49,8 +51,8 @@ public class RentController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("buildingList")
-	public ApiResponse<?> BuildingClick(@RequestBody BuildingRequest buildingName, HttpSession session) {
+	@GetMapping("getBuilding")
+	public ApiResponse<?> getBuilding(@RequestBody BuildingRequest buildingName, HttpSession session) {
 		HtmlPage rentPage1 = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
@@ -69,8 +71,8 @@ public class RentController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("classRoomList")
-	public ApiResponse<?> ClassRoomClick(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
+	@GetMapping("getClassRoom")
+	public ApiResponse<?> getClassRoom(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
 		HtmlPage rentPage2 = (HtmlPage) session.getAttribute("rentPage");
 
 		try {

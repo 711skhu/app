@@ -15,6 +15,8 @@ public enum DetailType {
 
 	private String detail;
 
-	DetailType(String detail){this.detail=detail;}
+	DetailType(String detail) {
+		this.detail = detail;
+	}
 
 }
