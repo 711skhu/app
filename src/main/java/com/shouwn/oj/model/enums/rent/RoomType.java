@@ -10,9 +10,9 @@ public enum RoomType {
 	MIDDLE("중형강의실"),
 	BIG("대형강의실");
 
-	private  String room;
+	private String room;
 
-	RoomType(String room){
+	RoomType(String room) {
 		this.room = room;
 	}
 }
