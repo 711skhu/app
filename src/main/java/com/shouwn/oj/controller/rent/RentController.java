@@ -6,19 +6,18 @@ import com.shouwn.oj.model.request.rent.BuildingRequest;
 import com.shouwn.oj.model.request.rent.ClassRoomRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
+import com.shouwn.oj.model.response.rent.LectureRentInfo;
+import com.shouwn.oj.model.response.rent.LectureRoom;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
 import com.shouwn.oj.service.rent.LectureRoomService;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("rent")
 public class RentController {
 	private final ConnectToRentPageService connectToRentPageService;
 	private final LectureRoomService lectureRoomService;
@@ -28,7 +27,7 @@ public class RentController {
 		this.lectureRoomService = lectureRoomService;
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	/*@PreAuthorize("isAuthenticated()")*/
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
 
@@ -50,41 +49,62 @@ public class RentController {
 				.build();
 	}
 
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("getBuilding")
-	public ApiResponse<?> getBuilding(@RequestBody BuildingRequest buildingName, HttpSession session) {
-		HtmlPage rentPage1 = (HtmlPage) session.getAttribute("rentPage");
+	/*@PreAuthorize("isAuthenticated()")*/
+	@GetMapping("buildings/{buildingNumber}/classrooms")
+	public ApiResponse<?> getBuilding(@PathVariable int buildingNumber, HttpSession session) {
+		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
 
 		try {
-			rentPage1 = (HtmlPage) lectureRoomService.selectBuilding(rentPage1, buildingName);
+			rentPage = lectureRoomService.selectBuilding(rentPage, buildingNumber);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
 					.build();
 		}
-		session.setAttribute("rentPage", rentPage1);
+		session.setAttribute("rentPage", rentPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("빌딩 클릭 성공")
+				/*.data(classRoomList)*/
 				.build();
 	}
 
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("getClassRoom")
-	public ApiResponse<?> getClassRoom(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
-		HtmlPage rentPage2 = (HtmlPage) session.getAttribute("rentPage");
+/*	@PreAuthorize("isAuthenticated()")*/
+	@GetMapping("classRoomList")
+	public ApiResponse<?> classRoomList(HttpSession session) {
+		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
+		List<LectureRoom> lectureRooms;
 
 		try {
-			System.out.println("classRoomList");
-			rentPage2 = (HtmlPage) lectureRoomService.selectClassRoom(rentPage2, classRoomName);
+			lectureRooms = lectureRoomService.classRoomList(rentPage);
 		} catch (RentException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
 					.build();
 		}
-		session.setAttribute("rentPage", rentPage2);
+
+		return CommonResponse.builder()
+				.status(HttpStatus.OK)
+				.message("강의실 목록 조회 성공")
+				.data(lectureRooms)
+				.build();
+	}
+	/*@PreAuthorize("isAuthenticated()")*/
+	@GetMapping("getClassRoom")
+	public ApiResponse<?> getClassRoom(@RequestBody ClassRoomRequest classRoomName, HttpSession session) {
+		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
+
+		try {
+			rentPage = (HtmlPage) lectureRoomService.selectClassRoom(rentPage, classRoomName);
+		} catch (RentException e) {
+			return CommonResponse.builder()
+					.status(HttpStatus.FORBIDDEN)
+					.message(e.getMessage())
+					.build();
+		}
+		session.setAttribute("rentPage", rentPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("강의실 클릭 성공")
