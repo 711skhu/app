@@ -7,16 +7,16 @@ public enum DetailType {
 
 	PROJECTOR("빔프로젝터"),
 	COMPUTER("컴퓨터"),
+	BOTH("컴퓨터","빔프로젝터"),
 	NULL("없음"),
 	SPECIAL("특수강의실"),
 	SMALL("소형강의실"),
 	MIDDLE("중형강의실"),
 	BIG("대형강의실");
 
-	private String detail;
+	private String[] details;
 
-	DetailType(String detail) {
-		this.detail = detail;
+	DetailType(String... details) {
+		this.details = details;
 	}
-
 }

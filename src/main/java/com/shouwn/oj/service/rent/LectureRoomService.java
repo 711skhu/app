@@ -2,10 +2,12 @@ package com.shouwn.oj.service.rent;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.shouwn.oj.model.enums.rent.BuildingType;
 import com.shouwn.oj.model.request.rent.BuildingRequest;
 import com.shouwn.oj.model.request.rent.ClassRoomRequest;
 import java.io.IOException;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,57 +17,21 @@ import static com.shouwn.oj.model.enums.rent.ClassroomType.*;
 @Service
 public class LectureRoomService {
 
-	public HtmlPage selectBuilding(HtmlPage rentPage, BuildingRequest buildingName) {
-		try {
-			clickBuilding(rentPage, buildingName);
+	public HtmlPage selectBuilding(HtmlPage rentPage, int buildingNumber) {
+			try {
+			clickBuilding(rentPage, BuildingType.valueOf(buildingNumber));
 			return rentPage;
 		} catch (IOException e) {
 			return ExceptionUtils.rethrow(e);
 		}
 	}
 
-	private static void clickBuilding(HtmlPage rentPage, BuildingRequest inputName) throws IOException {
-		HtmlAnchor link = null;
-		List<HtmlAnchor> anchors = rentPage.getAnchors();
-		for (HtmlAnchor anchor : anchors) {
-			String str = anchor.getId();
-			if (inputName.getBuildingName().equals(SEUNGYEONHALL.getBuildingName())) {
-				str = SEUNGYEONHALL.getBuildingButton();
-				link = anchor;
-				break;
-			}
-			if (inputName.getBuildingName().equals(IIMANHALL.getBuildingName())) {
-				str = IIMANHALL.getBuildingButton();
-				link = anchor;
-				break;
-			}
-			if (inputName.getBuildingName().equals(WOLDANGGHALL.getBuildingName())) {
-				str = WOLDANGGHALL.getBuildingButton();
-				link = anchor;
-			}
-			if (inputName.getBuildingName().equals(LEECHUNHWANHALL.getBuildingName())) {
-				str = LEECHUNHWANHALL.getBuildingButton();
-				link = anchor;
-				break;
-			}
-			if (inputName.getBuildingName().equals(SSECHUNNUNHALL.getBuildingName())) {
-				str = SSECHUNNUNHALL.getBuildingButton();
-				link = anchor;
-				break;
-			}
-			if (inputName.getBuildingName().equals(SUNGMIELEHALL.getBuildingName())) {
-				str = SUNGMIELEHALL.getBuildingButton();
-				link = anchor;
-				break;
-			}
-			if (inputName.getBuildingName().equals(MIELEHALL.getBuildingName())) {
-				str = MIELEHALL.getBuildingButton();
-				link = anchor;
-				break;
+	private static void clickBuilding(HtmlPage rentPage, BuildingType type) throws IOException {
+		for (HtmlAnchor anchor : rentPage.getAnchors()) {
+			if (StringUtils.equals(type.getBuildingButton(), anchor.getId())) {
+				anchor.click();
 			}
 		}
-		link.click();
-		return;
 	}
 
 	public HtmlPage selectClassRoom(HtmlPage rentPage, ClassRoomRequest classRoomName) {
