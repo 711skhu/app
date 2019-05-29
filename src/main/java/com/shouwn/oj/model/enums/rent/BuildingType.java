@@ -20,7 +20,7 @@ public enum BuildingType {
 
 	static {
 		map = Arrays.stream(BuildingType.values())
-				.collect(Collectors.toMap(BuildingType::getBuildingNumber, b -> b)); // BuildingType::getBuildingNumber
+				.collect(Collectors.toMap(BuildingType::getBuildingNumber, b -> b));
 	}
 
 	private int buildingNumber;

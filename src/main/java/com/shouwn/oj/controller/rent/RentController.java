@@ -7,6 +7,7 @@ import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.model.response.rent.LectureRoom;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
 import com.shouwn.oj.service.rent.LectureRoomService;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class RentController {
 
 	/*	@PreAuthorize("isAuthenticated()")*/
 	@GetMapping("buildings/{buildingNumber}/classrooms")
-	public ApiResponse<?> getBuilding(@PathVariable int buildingNumber, HttpSession session) {
+	public ApiResponse<?> getClassRoomList(@PathVariable int buildingNumber, HttpSession session) {
 		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
 		List<LectureRoom> lectureRooms;
 		try {
