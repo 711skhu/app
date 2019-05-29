@@ -7,9 +7,11 @@ import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.model.response.rent.LectureRoom;
 import com.shouwn.oj.service.rent.ConnectToRentPageService;
 import com.shouwn.oj.service.rent.LectureRoomService;
-import java.io.IOException;
+
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +28,7 @@ public class RentController {
 		this.lectureRoomService = lectureRoomService;
 	}
 
-	/*	@PreAuthorize("isAuthenticated()")*/
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("connect")
 	public ApiResponse<?> connectToRentPage(HttpSession session) {
 
@@ -48,7 +50,7 @@ public class RentController {
 				.build();
 	}
 
-	/*	@PreAuthorize("isAuthenticated()")*/
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("buildings/{buildingNumber}/classrooms")
 	public ApiResponse<?> getClassRoomList(@PathVariable int buildingNumber, HttpSession session) {
 		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
@@ -76,7 +78,7 @@ public class RentController {
 				.build();
 	}
 
-	/*	@PreAuthorize("isAuthenticated()")*/
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("classrooms/{classroomName}")
 	public ApiResponse<?> getClassRoom(@PathVariable String classroomName, HttpSession session) {
 		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");

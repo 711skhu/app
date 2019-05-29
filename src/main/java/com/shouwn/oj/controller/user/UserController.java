@@ -29,7 +29,7 @@ public class UserController {
 		this.userRentListService = userRentListService;
 	}
 
-/*	@PreAuthorize("isAuthenticated()")*/
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 
