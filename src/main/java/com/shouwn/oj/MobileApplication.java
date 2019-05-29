@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(StudentJwtProperties.class)
 public class MobileApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MobileApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(MobileApplication.class, args);
+	}
 }
