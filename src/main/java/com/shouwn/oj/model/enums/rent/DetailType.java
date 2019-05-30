@@ -4,9 +4,15 @@ import lombok.Getter;
 
 @Getter
 public enum DetailType {
-	//피아노 유무 등의 강의실 특이사항 입력
-	//피아노의 유무, 대강당일 경우
-	PIANO,
-	COMPUTER,
-	BIGHALL
+
+	PROJECTOR("빔프로젝터"),
+	COMPUTER("컴퓨터"),
+	BOTH("컴퓨터", "빔프로젝터"),
+	NULL("없음");
+
+	private String[] details;
+
+	DetailType(String... details) {
+		this.details = details;
+	}
 }
