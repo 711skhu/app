@@ -14,10 +14,6 @@ public class ConnectToRentalPageService {
 
 	public HtmlPage connectToRentalPage(HtmlPage uniMyMainPage) {
 		try {
-			if (!UrlType.MAINPAGE_URL.getUrl().equals(uniMyMainPage.getUrl())) {
-				throw new RentalException("잘못된 접근 입니다.");
-			}
-
 			HtmlPage mainPage = getPage(uniMyMainPage);
 			getLeftFrameBody(mainPage);
 			HtmlPage contentPage = getPage(mainPage);
@@ -25,7 +21,7 @@ public class ConnectToRentalPageService {
 			if (UrlType.RENTALPAGE_URL.getUrl().equals(contentPage.getUrl())) {
 				return contentPage;
 			} else {
-				throw new RentalException("연결 실패");
+				throw new RentalException("대여 페이지 연결 실패");
 			}
 
 		} catch (IOException e) {

@@ -33,7 +33,7 @@ public class UserRentalListService {
 
 			RentalDate rentalDate = new RentalDate(Integer.parseInt(rowRentalDate.substring(12, 14)), Integer.parseInt(rowRentalDate.substring(19, 21)) + 1, LocalDate.parse(rowRentalDate.substring(0, 10)));
 
-			rentalList.add(new LectureRentalInfo(rentalDate, rentalState, lectureCode));
+			rentalList.add(new LectureRentalInfo(i, rentalDate, rentalState, lectureCode, rentalState.equals("승인") ? false : true));
 		}
 
 		return rentalList;

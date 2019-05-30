@@ -16,7 +16,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LectureRoomService {
+public class LectureRoomInfoService {
 
 	public HtmlPage selectBuilding(HtmlPage rentalPage, int buildingNumber) {
 		try {
@@ -24,11 +24,14 @@ public class LectureRoomService {
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(type.getBuildingButton(), anchor.getId())) {
 					rentalPage = anchor.click();
+					Thread.sleep(3000);
 					break;
 				}
 			}
 			return rentalPage;
 		} catch (IOException e) {
+			return ExceptionUtils.rethrow(e);
+		} catch (InterruptedException e) {
 			return ExceptionUtils.rethrow(e);
 		}
 	}
@@ -72,17 +75,4 @@ public class LectureRoomService {
 		}
 	}
 
-	public HtmlPage selectClassRoom(HtmlPage rentalPage, String classroomName) {
-		try {
-			ClassroomType type = ClassroomType.value(classroomName);
-			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-				if (StringUtils.equals(type.getButton(), anchor.getId())) {
-					rentalPage = anchor.click();
-				}
-			}
-			return rentalPage;
-		} catch (IOException e) {
-			return ExceptionUtils.rethrow(e);
-		}
-	}
 }
