@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public enum UrlType {
-	ForestBaseURL("https://forest.skhu.ac.kr"),
-	LoginPageURL("https://forest.skhu.ac.kr/Gate/UniLogin.aspx"),
-	MainPageURL("https://forest.skhu.ac.kr/Gate/UniMyMain.aspx"),
-	RentPageURL("https://forest.skhu.ac.kr/Gate/SAM/Lesson/G/SSEG20P.aspx?&maincd=O&systemcd=S&seq=100");
+	FORESTBASE_URL("https://forest.skhu.ac.kr"),
+	LOGINPAGE_URL("https://forest.skhu.ac.kr/Gate/UniLogin.aspx"),
+	MAINPAGE_URL("https://forest.skhu.ac.kr/Gate/UniMyMain.aspx"),
+	RENTALPAGE_URL("https://forest.skhu.ac.kr/Gate/SAM/Lesson/G/SSEG20P.aspx?&maincd=O&systemcd=S&seq=100");
 
 	private final URL url;
 

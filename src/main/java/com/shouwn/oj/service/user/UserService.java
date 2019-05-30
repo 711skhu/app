@@ -23,14 +23,14 @@ public class UserService {
 			webClient.getOptions().setJavaScriptEnabled(true);
 			webClient.getOptions().setCssEnabled(false);
 
-			HtmlPage loginPage = webClient.getPage(UrlType.LoginPageURL.getUrl());
+			HtmlPage loginPage = webClient.getPage(UrlType.LOGINPAGE_URL.getUrl());
 			HtmlForm loginForm = loginPage.getFormByName("");
 			loginForm.getInputByName("txtID").setValueAttribute(loginRequest.getStudentNumber());
 			loginForm.getInputByName("txtPW").setValueAttribute(loginRequest.getPassword());
 
 			HtmlPage mainPage = loginForm.getInputByName("ibtnLogin").click();
 
-			if (!UrlType.MainPageURL.getUrl().equals(mainPage.getUrl())) {
+			if (!UrlType.MAINPAGE_URL.getUrl().equals(mainPage.getUrl())) {
 				throw new LoginException("로그인 실패. 계정 정보 확인 바랍니다.");
 			}
 			return mainPage;
