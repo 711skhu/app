@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.response.rent;
+package com.shouwn.oj.model.response.rental;
 
 import java.time.LocalDate;
 
@@ -7,16 +7,16 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RentDate {
+public class RentalDate {
 	private int startTime;
 	private int endTime;
-	private LocalDate rentDay;
+	private LocalDate rentalDate;
 
 	@Builder
-	public RentDate(int startTime, int endTime, LocalDate rentDay) {
+	public RentalDate(int startTime, int endTime, LocalDate rentalDate) {
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.rentDay = rentDay;
+		this.rentalDate = rentalDate;
 	}
 }
 

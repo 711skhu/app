@@ -1,31 +1,27 @@
-package com.shouwn.oj.service.rent;
+package com.shouwn.oj.service.rental;
 
 import java.io.IOException;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.shouwn.oj.exception.rent.RentException;
+import com.shouwn.oj.exception.rental.RentalException;
 import com.shouwn.oj.model.enums.user.UrlType;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConnectToRentPageService {
+public class ConnectToRentalPageService {
 
-	public HtmlPage connectToRentPage(HtmlPage uniMyMainPage) {
+	public HtmlPage connectToRentalPage(HtmlPage uniMyMainPage) {
 		try {
-			if (!UrlType.MainPageURL.getUrl().equals(uniMyMainPage.getUrl())) {
-				throw new RentException("잘못된 접근 입니다.");
-			}
-
 			HtmlPage mainPage = getPage(uniMyMainPage);
 			getLeftFrameBody(mainPage);
 			HtmlPage contentPage = getPage(mainPage);
 
-			if (UrlType.RentPageURL.getUrl().equals(contentPage.getUrl())) {
+			if (UrlType.RENTALPAGE_URL.getUrl().equals(contentPage.getUrl())) {
 				return contentPage;
 			} else {
-				throw new RentException("연결 실패");
+				throw new RentalException("대여 페이지 연결 실패");
 			}
 
 		} catch (IOException e) {
