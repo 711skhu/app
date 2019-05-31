@@ -23,6 +23,24 @@ public class LectureRentalInfoService {
 
 	public HtmlPage selectClassRoomAndRentalDate(HtmlPage rentalPage, RentalListRequest rentalListRequest) {
 		try {
+			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+
+			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
+				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
+					for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+						if (anchor.asText().equals("1")) {
+							rentalPage = anchor.click();
+							Thread.sleep(3000);
+							break;
+						}
+					}
+				}
+
+				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(rentalListRequest.getLectureCode())) {
+					break;
+				}
+			}
+
 			ClassroomType type = ClassroomType.value(rentalListRequest.getLectureCode());
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(type.getButton(), anchor.getId())) {
@@ -41,22 +59,25 @@ public class LectureRentalInfoService {
 			return rentalPage;
 		} catch (IOException e) {
 			return ExceptionUtils.rethrow(e);
-		}catch (InterruptedException e){
+		} catch (InterruptedException e) {
 			return ExceptionUtils.rethrow(e);
 		}
 	}
 
-	public List<LectureRentalInfo> getRentalList(HtmlPage rentalPage){
+	public List<LectureRentalInfo> getRentalList(HtmlPage rentalPage) {
 		List<LectureRentalInfo> rentalList = new ArrayList<>();
 		HtmlTable rentalListTable = (HtmlTable) rentalPage.getElementById("gv시설대여현황");
+		int index = 1;
 
 		for (int i = 1; i < rentalListTable.getRowCount(); i++) {
-			String rentalState = rentalListTable.getCellAt(i, 0).asText();
-			String rowRentalDate = rentalListTable.getCellAt(i, 1).asText();
+			if (!rentalListTable.getCellAt(i, 2).asText().equals("제한")) {
+				String rentalState = rentalListTable.getCellAt(i, 0).asText();
+				String rowRentalDate = rentalListTable.getCellAt(i, 1).asText();
 
-			RentalDate rentalDate = new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)) + 1, LocalDate.parse(rowRentalDate.substring(0, 10)));
+				RentalDate rentalDate = new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)) + 1, LocalDate.parse(rowRentalDate.substring(0, 10)));
 
-			rentalList.add(new LectureRentalInfo(i, rentalDate, rentalState));
+				rentalList.add(new LectureRentalInfo(index++, rentalState, rentalDate));
+			}
 		}
 
 		return rentalList;
