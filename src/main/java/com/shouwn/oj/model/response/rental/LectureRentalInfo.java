@@ -20,4 +20,10 @@ public class LectureRentalInfo {
 		this.lectureCode = lectureCode;
 		this.cancel = cancel;
 	}
+
+	public LectureRentalInfo(int idx, RentalDate rentalDate, String rentalState){
+		this.idx = idx;
+		this.rentalDate = rentalDate;
+		this.rentalState = rentalState;
+	}
 }

@@ -5,8 +5,10 @@ import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.rental.RentalException;
+import com.shouwn.oj.model.request.rental.RentalListRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
+import com.shouwn.oj.model.response.rental.LectureRentalInfo;
 import com.shouwn.oj.model.response.rental.LectureRoom;
 import com.shouwn.oj.service.rental.LectureRentalInfoService;
 import com.shouwn.oj.service.rental.LectureRoomInfoService;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -53,13 +56,15 @@ public class RentalController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("classrooms/{classroomName}/rentalList")
-	public ApiResponse<?> getRentalList(@PathVariable String classroomName, HttpSession session) {
+	@GetMapping("classrooms/rentalList")
+	public ApiResponse<?> getRentalList(@RequestBody RentalListRequest rentalListRequest, HttpSession session) {
 
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
+		List<LectureRentalInfo> rentalList;
 
 		try {
-			rentalPage = lectureRentalInfoService.selectClassRoom(rentalPage, classroomName);
+			rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, rentalListRequest);
+			rentalList = lectureRentalInfoService.getRentalList(rentalPage);
 		} catch (RentalException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
@@ -70,7 +75,8 @@ public class RentalController {
 		session.setAttribute("rentalPage", rentalPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
-				.message("강의실 클릭 성공")
+				.message("대여현황 목록 조회 성공")
+				.data(rentalList)
 				.build();
 	}
 }
