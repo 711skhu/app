@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.rental.RentalException;
-import com.shouwn.oj.model.request.rental.RentalListRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.model.response.rental.LectureRentalInfo;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
