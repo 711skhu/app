@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LectureRentalInfoService {
 
-	public HtmlPage selectClassRoomAndRentalDate(HtmlPage rentalPage, RentalListRequest rentalListRequest) {
+	public HtmlPage selectClassRoomAndRentalDate(HtmlPage rentalPage, String classroomNumber, String rentalDate) {
 		try {
 			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
 
@@ -36,12 +36,12 @@ public class LectureRentalInfoService {
 					}
 				}
 
-				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(rentalListRequest.getLectureCode())) {
+				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
 					break;
 				}
 			}
 
-			ClassroomType type = ClassroomType.value(rentalListRequest.getLectureCode());
+			ClassroomType type = ClassroomType.value(classroomNumber);
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(type.getButton(), anchor.getId())) {
 					rentalPage = anchor.click();
@@ -50,7 +50,7 @@ public class LectureRentalInfoService {
 			}
 
 			HtmlInput rentalDateInput = (HtmlInput) rentalPage.getElementById("txtRentDt");
-			rentalDateInput.setValueAttribute(rentalListRequest.getRentalDate());
+			rentalDateInput.setValueAttribute(rentalDate);
 
 			HtmlInput inquiryButton = (HtmlInput) rentalPage.getElementById("btnList");
 			rentalPage = inquiryButton.click();

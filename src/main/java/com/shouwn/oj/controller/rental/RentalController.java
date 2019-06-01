@@ -56,14 +56,16 @@ public class RentalController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("classrooms/rentalList")
-	public ApiResponse<?> getRentalList(@RequestBody RentalListRequest rentalListRequest, HttpSession session) {
+	@GetMapping("classrooms/{classroomNumber}/{rentalDate}/rentalList")
+	public ApiResponse<?> getRentalList(@PathVariable(value = "classroomNumber") String classroomNumber,
+										@PathVariable(value = "rentalDate") String rentalDate,
+										HttpSession session) {
 
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
 		List<LectureRentalInfo> rentalList;
 
 		try {
-			rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, rentalListRequest);
+			rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, classroomNumber, rentalDate);
 			rentalList = lectureRentalInfoService.getRentalList(rentalPage);
 		} catch (RentalException e) {
 			return CommonResponse.builder()
