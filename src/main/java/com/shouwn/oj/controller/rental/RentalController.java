@@ -4,7 +4,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.model.response.rental.LectureRentalInfo;
@@ -35,20 +34,8 @@ public class RentalController {
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
 		List<LectureRoom> lectureRooms;
 
-		try {
-			rentalPage = lectureRoomInfoService.selectBuilding(rentalPage, buildingNumber);
-			lectureRooms = lectureRoomInfoService.classRoomList(rentalPage);
-		} catch (IllegalStateException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		} catch (InvalidParameterException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.BAD_REQUEST)
-					.message(e.getMessage())
-					.build();
-		}
+		rentalPage = lectureRoomInfoService.selectBuilding(rentalPage, buildingNumber);
+		lectureRooms = lectureRoomInfoService.classRoomList(rentalPage);
 
 		session.setAttribute("rentalPage", rentalPage);
 		return CommonResponse.builder()
@@ -60,27 +47,13 @@ public class RentalController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("classrooms/{classroomNumber}/{rentalDate}/rentalList")
-	public ApiResponse<?> getRentalList(@PathVariable(value = "classroomNumber") String classroomNumber,
-										@PathVariable(value = "rentalDate") String rentalDate,
-										HttpSession session) {
+	public ApiResponse<?> getRentalList(@PathVariable(value = "classroomNumber") String classroomNumber, @PathVariable(value = "rentalDate") String rentalDate, HttpSession session) {
 
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
 		List<LectureRentalInfo> rentalList;
 
-		try {
-			rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, classroomNumber, rentalDate);
-			rentalList = lectureRentalInfoService.getRentalList(rentalPage);
-		} catch (IllegalStateException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		} catch (InvalidParameterException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.BAD_REQUEST)
-					.message(e.getMessage())
-					.build();
-		}
+		rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, classroomNumber, rentalDate);
+		rentalList = lectureRentalInfoService.getRentalList(rentalPage);
 
 		session.setAttribute("rentalPage", rentalPage);
 		return CommonResponse.builder()

@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.shouwn.oj.exception.InvalidParameterException;
-import com.shouwn.oj.exception.NotFoundException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
@@ -43,15 +42,8 @@ public class UserController {
 			throw new InvalidParameterException("아이디 혹은 비밀번호를 입력해주세요.");
 		}
 
-		try {
-			htmlPage = userService.login(loginRequest);
-			htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
-		} catch (NotFoundException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		htmlPage = userService.login(loginRequest);
+		htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
 
 		session.setAttribute("rentalPage", htmlPage);
 		return CommonResponse.builder()
@@ -66,14 +58,7 @@ public class UserController {
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
 		List<UserLectureRentalInfo> rentalList;
 
-		try {
-			rentalList = userRentalListService.rentalList(rentalPage);
-		} catch (IllegalStateException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		rentalList = userRentalListService.rentalList(rentalPage);
 
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
