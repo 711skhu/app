@@ -71,7 +71,7 @@ public class LectureRoomInfoService {
 
 				String classroomName = lectureRoomsTable.getCellAt(i, 0).asText();
 				int people = Integer.parseInt(lectureRoomsTable.getCellAt(i, 2).asText());
-				ClassroomType classroomType = ClassroomType.value(classroomName);
+				ClassroomType classroomType = ClassroomType.valudOfClassroomName(classroomName);
 
 				if (StringUtils.equals(classroomType.getClassroomName(), classroomName)) {
 					lectureRooms.add(new LectureRoom(classroomType.getClassroomName(), people, classroomType.getDetailType(), classroomType.getClassType()));

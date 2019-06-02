@@ -51,7 +51,7 @@ public class LectureRentalInfoService {
 				}
 			}
 
-			ClassroomType type = ClassroomType.value(classroomNumber);
+			ClassroomType type = ClassroomType.valudOfClassroomName(classroomNumber);
 			if (type == null) {
 				throw new InvalidParameterException("존재하지 않는 강의실 입니다.");
 			} else if (!classroomCheck) {
