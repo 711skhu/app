@@ -9,7 +9,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.enums.rental.ClassroomType;
+import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.response.rental.LectureRentalInfo;
 import com.shouwn.oj.model.response.rental.RentalDate;
 import org.apache.commons.lang3.StringUtils;
@@ -21,8 +23,16 @@ import org.springframework.stereotype.Service;
 public class LectureRentalInfoService {
 
 	public HtmlPage selectClassRoomAndRentalDate(HtmlPage rentalPage, String classroomNumber, String rentalDate) {
+		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+			throw new IllegalStateException("잘못된 접근 입니다.");
+		}
+		if (!rentalDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+			throw new InvalidParameterException("잘못된 날짜 형식 입니다.");
+		}
+
 		try {
 			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+			boolean classroomCheck = false;
 
 			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
 				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
@@ -36,11 +46,18 @@ public class LectureRentalInfoService {
 				}
 
 				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
+					classroomCheck = true;
 					break;
 				}
 			}
 
 			ClassroomType type = ClassroomType.value(classroomNumber);
+			if (type == null) {
+				throw new InvalidParameterException("존재하지 않는 강의실 입니다.");
+			} else if (!classroomCheck) {
+				throw new InvalidParameterException("건물이 일치하지 않는 강의실 입니다.");
+			}
+
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(type.getButton(), anchor.getId())) {
 					rentalPage = anchor.click();

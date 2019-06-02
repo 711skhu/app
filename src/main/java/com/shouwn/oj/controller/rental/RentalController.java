@@ -4,7 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.rental.RentalException;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
 import com.shouwn.oj.model.response.rental.LectureRentalInfo;
@@ -38,9 +38,14 @@ public class RentalController {
 		try {
 			rentalPage = lectureRoomInfoService.selectBuilding(rentalPage, buildingNumber);
 			lectureRooms = lectureRoomInfoService.classRoomList(rentalPage);
-		} catch (RentalException e) {
+		} catch (IllegalStateException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
+					.message(e.getMessage())
+					.build();
+		} catch (InvalidParameterException e) {
+			return CommonResponse.builder()
+					.status(HttpStatus.BAD_REQUEST)
 					.message(e.getMessage())
 					.build();
 		}
@@ -65,9 +70,14 @@ public class RentalController {
 		try {
 			rentalPage = lectureRentalInfoService.selectClassRoomAndRentalDate(rentalPage, classroomNumber, rentalDate);
 			rentalList = lectureRentalInfoService.getRentalList(rentalPage);
-		} catch (RentalException e) {
+		} catch (IllegalStateException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
+					.message(e.getMessage())
+					.build();
+		} catch (InvalidParameterException e) {
+			return CommonResponse.builder()
+					.status(HttpStatus.BAD_REQUEST)
 					.message(e.getMessage())
 					.build();
 		}

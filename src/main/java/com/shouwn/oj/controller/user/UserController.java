@@ -4,8 +4,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.rental.RentalException;
-import com.shouwn.oj.exception.user.LoginException;
+import com.shouwn.oj.exception.InvalidParameterException;
+import com.shouwn.oj.exception.NotFoundException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
@@ -40,16 +40,13 @@ public class UserController {
 		HtmlPage htmlPage;
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
-			return CommonResponse.builder()
-					.status(HttpStatus.PRECONDITION_FAILED)
-					.message("아이디 혹은 비밀번호를 입력해주세요.")
-					.build();
+			throw new InvalidParameterException("아이디 혹은 비밀번호를 입력해주세요.");
 		}
 
 		try {
 			htmlPage = userService.login(loginRequest);
 			htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
-		} catch (LoginException e) {
+		} catch (NotFoundException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())
@@ -71,7 +68,7 @@ public class UserController {
 
 		try {
 			rentalList = userRentalListService.rentalList(rentalPage);
-		} catch (RentalException e) {
+		} catch (IllegalStateException e) {
 			return CommonResponse.builder()
 					.status(HttpStatus.FORBIDDEN)
 					.message(e.getMessage())

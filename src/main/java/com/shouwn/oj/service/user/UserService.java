@@ -6,7 +6,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.user.LoginException;
+import com.shouwn.oj.exception.NotFoundException;
 import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -31,7 +31,7 @@ public class UserService {
 			HtmlPage mainPage = loginForm.getInputByName("ibtnLogin").click();
 
 			if (!UrlType.MAINPAGE_URL.getUrl().equals(mainPage.getUrl())) {
-				throw new LoginException("로그인 실패. 계정 정보 확인 바랍니다.");
+				throw new NotFoundException("로그인 실패. 계정 정보 확인 바랍니다.");
 			}
 			return mainPage;
 

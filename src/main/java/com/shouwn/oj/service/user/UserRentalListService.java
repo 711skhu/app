@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.shouwn.oj.exception.rental.RentalException;
 import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.response.rental.RentalDate;
 import com.shouwn.oj.model.response.user.UserLectureRentalInfo;
@@ -18,7 +17,7 @@ public class UserRentalListService {
 
 	public List<UserLectureRentalInfo> rentalList(HtmlPage rentalPage) {
 		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
-			throw new RentalException("잘못된 접근 입니다.");
+			throw new IllegalStateException("잘못된 접근 입니다.");
 		}
 
 		List<UserLectureRentalInfo> rentalList = new ArrayList<>();
