@@ -3,7 +3,7 @@ package com.shouwn.oj.service.rental;
 import java.io.IOException;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import com.shouwn.oj.exception.rental.RentalException;
+import com.shouwn.oj.exception.NotFoundException;
 import com.shouwn.oj.model.enums.user.UrlType;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -21,7 +21,7 @@ public class ConnectToRentalPageService {
 			if (UrlType.RENTALPAGE_URL.getUrl().equals(contentPage.getUrl())) {
 				return contentPage;
 			} else {
-				throw new RentalException("대여 페이지 연결 실패");
+				throw new NotFoundException("대여 페이지 연결 실패");
 			}
 
 		} catch (IOException e) {

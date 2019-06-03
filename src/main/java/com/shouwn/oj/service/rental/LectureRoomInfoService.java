@@ -7,8 +7,11 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.shouwn.oj.exception.IllegalStateException;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.enums.rental.BuildingType;
 import com.shouwn.oj.model.enums.rental.ClassroomType;
+import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.response.rental.LectureRoom;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -19,8 +22,16 @@ import org.springframework.stereotype.Service;
 public class LectureRoomInfoService {
 
 	public HtmlPage selectBuilding(HtmlPage rentalPage, int buildingNumber) {
+		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+			throw new IllegalStateException("잘못된 접근 입니다.");
+		}
+
 		try {
 			BuildingType type = BuildingType.valueOf(buildingNumber);
+			if (type == null) {
+				throw new InvalidParameterException("존재하지 않는 건물 입니다.");
+			}
+
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(type.getBuildingButton(), anchor.getId())) {
 					rentalPage = anchor.click();
@@ -61,7 +72,8 @@ public class LectureRoomInfoService {
 
 				String classroomName = lectureRoomsTable.getCellAt(i, 0).asText();
 				int people = Integer.parseInt(lectureRoomsTable.getCellAt(i, 2).asText());
-				ClassroomType classroomType = ClassroomType.value(classroomName);
+				ClassroomType classroomType = ClassroomType.valudOfClassroomName(classroomName);
+
 				if (StringUtils.equals(classroomType.getClassroomName(), classroomName)) {
 					lectureRooms.add(new LectureRoom(classroomType.getClassroomName(), people, classroomType.getDetailType(), classroomType.getClassType()));
 				}

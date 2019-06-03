@@ -4,12 +4,11 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.rental.RentalException;
-import com.shouwn.oj.exception.user.LoginException;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
-import com.shouwn.oj.model.response.rental.LectureRentalInfo;
+import com.shouwn.oj.model.response.user.UserLectureRentalInfo;
 import com.shouwn.oj.service.rental.ConnectToRentalPageService;
 import com.shouwn.oj.service.user.UserRentalListService;
 import com.shouwn.oj.service.user.UserService;
@@ -40,21 +39,11 @@ public class UserController {
 		HtmlPage htmlPage;
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
-			return CommonResponse.builder()
-					.status(HttpStatus.PRECONDITION_FAILED)
-					.message("아이디 혹은 비밀번호를 입력해주세요.")
-					.build();
+			throw new InvalidParameterException("아이디 혹은 비밀번호를 입력해주세요.");
 		}
 
-		try {
-			htmlPage = userService.login(loginRequest);
-			htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
-		} catch (LoginException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		htmlPage = userService.login(loginRequest);
+		htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
 
 		session.setAttribute("rentalPage", htmlPage);
 		return CommonResponse.builder()
@@ -67,16 +56,9 @@ public class UserController {
 	@GetMapping("rentalList")
 	public ApiResponse<?> rentalList(HttpSession session) {
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
-		List<LectureRentalInfo> rentalList;
+		List<UserLectureRentalInfo> rentalList;
 
-		try {
-			rentalList = userRentalListService.rentalList(rentalPage);
-		} catch (RentalException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		rentalList = userRentalListService.rentalList(rentalPage);
 
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)

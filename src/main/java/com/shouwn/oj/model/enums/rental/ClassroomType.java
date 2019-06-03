@@ -3,6 +3,7 @@ package com.shouwn.oj.model.enums.rental;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
 
 @Getter
@@ -47,13 +48,13 @@ public enum ClassroomType {
 	SSECHUNNUNHALL_7208("7208", "gv시설목록_ctl09_btnSelect", DetailType.PROJECTOR, RoomType.BIG),
 	SSECHUNNUNHALL_7301("7301", "gv시설목록_ctl10_btnSelect", DetailType.NULL, RoomType.SMALL),
 	SSECHUNNUNHALL_7302("7302", "gv시설목록_ctl11_btnSelect", DetailType.NULL, RoomType.SMALL),
-	SSECHUNNUNHALL_7303("7303", "gv시설목록_ctl12_btnSelect", DetailType.NULL, RoomType.SMALL),
-	SSECHUNNUNHALL_7304("7304", "gv시설목록_ctl13_btnSelect", DetailType.NULL, RoomType.MIDDLE),
-	SSECHUNNUNHALL_7305("7305", "gv시설목록_ctl14_btnSelect", DetailType.NULL, RoomType.SMALL),
-	SSECHUNNUNHALL_7306("7306", "gv시설목록_ctl15_btnSelect", DetailType.NULL, RoomType.SMALL),
-	SSECHUNNUNHALL_7307("7307", "gv시설목록_ctl16_btnSelect", DetailType.NULL, RoomType.SMALL),
-	SSECHUNNUNHALL_7308("7308", "gv시설목록_ctl17_btnSelect", DetailType.PROJECTOR, RoomType.BIG),
-	SSECHUNNUNHALL_7309("7309", "gv시설목록_ctl18_btnSelect", DetailType.PROJECTOR, RoomType.BIG),
+	SSECHUNNUNHALL_7303("7303", "gv시설목록_ctl02_btnSelect", DetailType.NULL, RoomType.SMALL),
+	SSECHUNNUNHALL_7304("7304", "gv시설목록_ctl03_btnSelect", DetailType.NULL, RoomType.MIDDLE),
+	SSECHUNNUNHALL_7305("7305", "gv시설목록_ctl04_btnSelect", DetailType.NULL, RoomType.SMALL),
+	SSECHUNNUNHALL_7306("7306", "gv시설목록_ctl05_btnSelect", DetailType.NULL, RoomType.SMALL),
+	SSECHUNNUNHALL_7307("7307", "gv시설목록_ctl06_btnSelect", DetailType.NULL, RoomType.SMALL),
+	SSECHUNNUNHALL_7308("7308", "gv시설목록_ctl07_btnSelect", DetailType.PROJECTOR, RoomType.BIG),
+	SSECHUNNUNHALL_7309("7309", "gv시설목록_ctl08_btnSelect", DetailType.PROJECTOR, RoomType.BIG),
 
 	SUNGMIELEHALL_9101("9101", "gv시설목록_ctl02_btnSelect", DetailType.PROJECTOR, RoomType.SPECIAL),
 
@@ -67,8 +68,8 @@ public enum ClassroomType {
 	MIELEHALL_M402("M402", "gv시설목록_ctl09_btnSelect", DetailType.PROJECTOR, RoomType.MIDDLE),
 	MIELEHALL_M403("M403", "gv시설목록_ctl10_btnSelect", DetailType.PROJECTOR, RoomType.SMALL),
 	MIELEHALL_M404("M404", "gv시설목록_ctl11_btnSelect", DetailType.PROJECTOR, RoomType.SMALL),
-	MIELEHALL_M406("M406", "gv시설목록_ctl12_btnSelect", DetailType.PROJECTOR, RoomType.MIDDLE),
-	MIELEHALL_M407("M407", "gv시설목록_ctl13_btnSelect", DetailType.PROJECTOR, RoomType.MIDDLE);
+	MIELEHALL_M406("M406", "gv시설목록_ctl02_btnSelect", DetailType.PROJECTOR, RoomType.MIDDLE),
+	MIELEHALL_M407("M407", "gv시설목록_ctl03_btnSelect", DetailType.PROJECTOR, RoomType.MIDDLE);
 
 	private static final Map<String, ClassroomType> map;
 
@@ -89,7 +90,7 @@ public enum ClassroomType {
 		this.classType = classType;
 	}
 
-	public static ClassroomType value(String classroomName) {
+	public static ClassroomType valudOfClassroomName(String classroomName) {
 		return map.get(classroomName);
 	}
 }
