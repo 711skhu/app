@@ -3,6 +3,8 @@ package com.shouwn.oj.service.rental;
 import java.io.IOException;
 
 import com.gargoylesoftware.htmlunit.html.*;
+import com.shouwn.oj.exception.IllegalStateException;
+import com.shouwn.oj.model.enums.user.UrlType;
 import com.shouwn.oj.model.request.rental.RentalRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -13,6 +15,10 @@ public class RequestRentalService {
 
 	public HtmlPage requestRental(HtmlPage rentalPage, RentalRequest rentalRequest) {
 		try {
+			if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+				throw new IllegalStateException("잘못된 접근 입니다.");
+			}
+
 			HtmlSelect selectStartTime = (HtmlSelect) rentalPage.getElementById("fv시설대여_ddlFrTm");
 			HtmlOption timeOption = selectStartTime.getOptionByValue(rentalRequest.getStartTime());
 			selectStartTime.setSelectedAttribute(timeOption, true);
@@ -36,7 +42,7 @@ public class RequestRentalService {
 			HtmlAnchor request = (HtmlAnchor) rentalPage.getElementById("fv시설대여_btnSubmit");
 			rentalPage = request.click();
 
-		}catch (IOException e){
+		} catch (IOException e) {
 			ExceptionUtils.rethrow(e);
 		}
 

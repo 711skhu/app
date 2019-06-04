@@ -31,7 +31,7 @@ public class UserController {
 		this.userRentalListService = userRentalListService;
 	}
 
-//	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 
@@ -52,7 +52,7 @@ public class UserController {
 				.build();
 	}
 
-//	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("rentalList")
 	public ApiResponse<?> rentalList(HttpSession session) {
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
