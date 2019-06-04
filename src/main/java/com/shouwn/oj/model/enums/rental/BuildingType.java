@@ -1,4 +1,4 @@
-package com.shouwn.oj.model.enums.rent;
+package com.shouwn.oj.model.enums.rental;
 
 import java.util.Arrays;
 import java.util.Map;

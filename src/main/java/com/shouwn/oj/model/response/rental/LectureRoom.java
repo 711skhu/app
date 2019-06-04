@@ -1,7 +1,7 @@
-package com.shouwn.oj.model.response.rent;
+package com.shouwn.oj.model.response.rental;
 
-import com.shouwn.oj.model.enums.rent.DetailType;
-import com.shouwn.oj.model.enums.rent.RoomType;
+import com.shouwn.oj.model.enums.rental.DetailType;
+import com.shouwn.oj.model.enums.rental.RoomType;
 import lombok.*;
 
 @Getter

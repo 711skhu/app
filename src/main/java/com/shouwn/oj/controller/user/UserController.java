@@ -4,13 +4,13 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.shouwn.oj.exception.rent.RentException;
-import com.shouwn.oj.exception.user.LoginException;
+import com.shouwn.oj.exception.InvalidParameterException;
 import com.shouwn.oj.model.request.user.UserLoginRequest;
 import com.shouwn.oj.model.response.ApiResponse;
 import com.shouwn.oj.model.response.CommonResponse;
-import com.shouwn.oj.model.response.rent.LectureRentInfo;
-import com.shouwn.oj.service.user.UserRentListService;
+import com.shouwn.oj.model.response.user.UserLectureRentalInfo;
+import com.shouwn.oj.service.rental.ConnectToRentalPageService;
+import com.shouwn.oj.service.user.UserRentalListService;
 import com.shouwn.oj.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,37 +22,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("user")
 public class UserController {
 	private final UserService userService;
-	private final UserRentListService userRentListService;
+	private final ConnectToRentalPageService connectToRentalPageService;
+	private final UserRentalListService userRentalListService;
 
-	public UserController(UserService userService, UserRentListService userRentListService) {
+	public UserController(UserService userService, ConnectToRentalPageService connectToRentalPageService, UserRentalListService userRentalListService) {
 		this.userService = userService;
-		this.userRentListService = userRentListService;
+		this.connectToRentalPageService = connectToRentalPageService;
+		this.userRentalListService = userRentalListService;
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("login")
 	public ApiResponse<?> login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
 
-		session.setAttribute("rentPage", null);
-		HtmlPage mainPage;
+		session.setAttribute("rentalPage", null);
+		HtmlPage htmlPage;
 
 		if (StringUtils.isBlank(loginRequest.getStudentNumber()) || StringUtils.isBlank(loginRequest.getPassword())) {
-			return CommonResponse.builder()
-					.status(HttpStatus.PRECONDITION_FAILED)
-					.message("아이디 혹은 비밀번호를 입력해주세요.")
-					.build();
+			throw new InvalidParameterException("아이디 혹은 비밀번호를 입력해주세요.");
 		}
 
-		try {
-			mainPage = userService.login(loginRequest);
-		} catch (LoginException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		htmlPage = userService.login(loginRequest);
+		htmlPage = connectToRentalPageService.connectToRentalPage(htmlPage);
 
-		session.setAttribute("rentPage", mainPage);
+		session.setAttribute("rentalPage", htmlPage);
 		return CommonResponse.builder()
 				.status(HttpStatus.CREATED)
 				.message("로그인 성공")
@@ -60,24 +53,17 @@ public class UserController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("rentList")
-	public ApiResponse<?> rentList(HttpSession session) {
-		HtmlPage rentPage = (HtmlPage) session.getAttribute("rentPage");
-		List<LectureRentInfo> rentList;
+	@GetMapping("rentalList")
+	public ApiResponse<?> rentalList(HttpSession session) {
+		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
+		List<UserLectureRentalInfo> rentalList;
 
-		try {
-			rentList = userRentListService.rentList(rentPage);
-		} catch (RentException e) {
-			return CommonResponse.builder()
-					.status(HttpStatus.FORBIDDEN)
-					.message(e.getMessage())
-					.build();
-		}
+		rentalList = userRentalListService.rentalList(rentalPage);
 
 		return CommonResponse.builder()
 				.status(HttpStatus.OK)
 				.message("사용자 대여 목록 조회 성공")
-				.data(rentList)
+				.data(rentalList)
 				.build();
 	}
 
