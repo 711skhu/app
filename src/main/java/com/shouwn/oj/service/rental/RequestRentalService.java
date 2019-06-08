@@ -29,7 +29,11 @@ public class RequestRentalService {
 
 			for (int i = 1; i < rentalListTable.getRowCount(); i++) {
 				String rowRentalDate = rentalListTable.getCellAt(i, 1).asText();
-				rentalList.add(new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)), LocalDate.parse(rowRentalDate.substring(0, 10))));
+				if (rentalListTable.getCellAt(i, 2).asText().equals("제한") && rowRentalDate.substring(30, 32).equals("09")) {
+					rentalList.add(new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)) - 1, LocalDate.parse(rowRentalDate.substring(0, 10))));
+				} else {
+					rentalList.add(new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)), LocalDate.parse(rowRentalDate.substring(0, 10))));
+				}
 			}
 
 			int startTime = Integer.parseInt(rentalRequest.getStartTime());
@@ -40,7 +44,7 @@ public class RequestRentalService {
 			}
 
 			for (RentalDate rentalDate : rentalList) {
-				if ((startTime >= rentalDate.getStartTime() && startTime <= rentalDate.getEndTime()) || (endTime >= rentalDate.getStartTime() && endTime <= rentalDate.getEndTime())) {
+				if ((startTime >= rentalDate.getStartTime() && startTime <= rentalDate.getEndTime()) || (endTime >= rentalDate.getStartTime() && endTime <= rentalDate.getEndTime()) || (startTime <= rentalDate.getStartTime() && endTime >= rentalDate.getEndTime())) {
 					throw new InvalidParameterException("이미 대여중인 시간 입니다.");
 				}
 			}
