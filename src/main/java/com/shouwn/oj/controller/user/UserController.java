@@ -67,4 +67,18 @@ public class UserController {
 				.build();
 	}
 
+	@GetMapping("rentalCancel/{idx}")
+	public ApiResponse<?> rentalCancel(@PathVariable(value = "idx") int idx, HttpSession session) {
+		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
+		List<UserLectureRentalInfo> rentalList;
+
+		rentalList = userRentalListService.rentalList(rentalPage);
+		userRentalListService.rentalCancel(rentalPage,idx);
+
+		return CommonResponse.builder()
+				.status(HttpStatus.OK)
+				.message("사용자 대여 목록 삭제 성공")
+				.data(rentalList)
+				.build();
+	}
 }
