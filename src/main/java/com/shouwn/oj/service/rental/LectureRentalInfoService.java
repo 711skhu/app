@@ -38,7 +38,7 @@ public class LectureRentalInfoService {
 			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
 				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
 					for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-						if (anchor.asText().equals("1")) {
+						if (anchor.asText().equals("1") || anchor.asText().equals("2")) {
 							rentalPage = anchor.click();
 							Thread.sleep(3000);
 							break;
@@ -49,6 +49,20 @@ public class LectureRentalInfoService {
 				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
 					classroomCheck = true;
 					break;
+				}
+			}
+
+			if (!classroomCheck) {
+				lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+				for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
+					if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
+						break;
+					}
+
+					if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
+						classroomCheck = true;
+						break;
+					}
 				}
 			}
 
