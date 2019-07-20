@@ -132,9 +132,9 @@ public class UserRentalListService {
 					}
 				}
 
-			for (HtmlAnchor anchor2 : rentalPage.getAnchors()) {
-				if (StringUtils.equals(("gv대여내역_ctl0"+(idx+1)+"_btnDelete"), anchor2.getId())) {
-					rentalPage = anchor2.click();
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("gv대여내역_ctl0"+(idx+1)+"_btnDelete"), anchor.getId())) {
+					rentalPage = anchor.click();
 					Thread.sleep(3000);
 					break;
 				}
