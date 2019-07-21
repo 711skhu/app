@@ -40,6 +40,8 @@ public class UserRentalListService {
 
 				rentalList.add(new UserLectureRentalInfo(i, rentalDate, rentalState, lectureCode, rentalState.equals("승인") ? false : true));
 
+				if(i==10)
+					return rentalList;
 			}
 			return rentalList;
 
