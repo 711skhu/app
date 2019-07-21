@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@DeleteMapping("delete/{idx}")
+	@DeleteMapping("rental/{idx}")
 	public ApiResponse<?> rentalCancel(@PathVariable(value = "idx") int idx, HttpSession session) {
 		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
 
