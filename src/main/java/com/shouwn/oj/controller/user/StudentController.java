@@ -24,7 +24,7 @@ public class StudentController {
 	}
 
 	@GetMapping("own")
-	@PreAuthorize("isAuthenticated()")
+//	@PreAuthorize("isAuthenticated()")
 	public ApiResponse<?> getSelfInformation(@CurrentUser Long requestId) {
 		Student student = studentServiceForApi.findById(requestId);
 
