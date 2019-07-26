@@ -21,12 +21,11 @@ import org.springframework.stereotype.Service;
 public class UserRentalListService {
 
 	public List<UserLectureRentalInfo> rentalList(HtmlPage rentalPage) {
+		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+			throw new IllegalStateException("잘못된 접근 입니다.");
+		}
+
 		try {
-			if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
-				throw new IllegalStateException("잘못된 접근 입니다.");
-
-			}
-
 			int pageCount = 1;
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(("javascript:__doPostBack('gv대여내역','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
@@ -74,10 +73,13 @@ public class UserRentalListService {
 	}
 
 	public HtmlPage rentalCancel(HtmlPage rentalPage, int idx) {
+		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+			throw new IllegalStateException("잘못된 접근 입니다.");
+		}
+
 		try {
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
 				if (StringUtils.equals(("javascript:__doPostBack('gv대여내역','Page$" + (idx % 10 == 0 ? idx / 10 : idx / 10 + 1) + "')"), anchor.getHrefAttribute())) {
-					System.out.println("test=== " + anchor.getHrefAttribute());
 					rentalPage = anchor.click();
 					Thread.sleep(3000);
 					break;
@@ -95,5 +97,6 @@ public class UserRentalListService {
 			return ExceptionUtils.rethrow(e);
 		}
 	}
+
 }
 

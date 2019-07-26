@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 public class RequestRentalService {
 
 	public HtmlPage requestRental(HtmlPage rentalPage, RentalRequest rentalRequest) {
-		try {
-			if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
-				throw new IllegalStateException("잘못된 접근 입니다.");
-			}
+		if (!UrlType.RENTALPAGE_URL.getUrl().equals(rentalPage.getUrl())) {
+			throw new IllegalStateException("잘못된 접근 입니다.");
+		}
 
+		try {
 			List<RentalDate> rentalList = new ArrayList<>();
 			HtmlTable rentalListTable = (HtmlTable) rentalPage.getElementById("gv시설대여현황");
 
@@ -81,12 +81,12 @@ public class RequestRentalService {
 			rentalPage = request.click();
 			Thread.sleep(3000);
 
+			return rentalPage;
 		} catch (IOException e) {
-			ExceptionUtils.rethrow(e);
+			return ExceptionUtils.rethrow(e);
 		} catch (InterruptedException e) {
-			ExceptionUtils.rethrow(e);
+			return ExceptionUtils.rethrow(e);
 		}
-
-		return rentalPage;
 	}
+
 }

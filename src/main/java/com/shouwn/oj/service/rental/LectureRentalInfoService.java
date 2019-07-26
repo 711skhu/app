@@ -130,6 +130,6 @@ public class LectureRentalInfoService {
 		} catch (InterruptedException e) {
 			return ExceptionUtils.rethrow(e);
 		}
-
 	}
+
 }
