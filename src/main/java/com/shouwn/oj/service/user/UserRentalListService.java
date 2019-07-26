@@ -27,10 +27,18 @@ public class UserRentalListService {
 
 			}
 
+			int pageCount = 1;
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("javascript:__doPostBack('gv대여내역','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
+					rentalPage = anchor.click();
+					Thread.sleep(3000);
+					break;
+				}
+			}
+
 			List<UserLectureRentalInfo> rentalList = new ArrayList<>();
 			HtmlTable rentalListTable = (HtmlTable) rentalPage.getElementById("gv대여내역");
 
-			int pageCount = 1;
 			int index = 0;
 			for (int i = 1; i < rentalListTable.getRowCount(); i++) {
 				if (rentalListTable.getRow(i).getChildElementCount() == 1) {
@@ -68,14 +76,15 @@ public class UserRentalListService {
 	public HtmlPage rentalCancel(HtmlPage rentalPage, int idx) {
 		try {
 			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-				if (StringUtils.equals(("javascript:__doPostBack('gv대여내역','Page$" + (idx / 10 + 1) + "')"), anchor.getHrefAttribute())) {
-					HtmlAnchor pagination = rentalPage.getAnchorByHref("javascript:__doPostBack('gv대여내역','Page$" + (idx / 10 + 1) + "')");
-					rentalPage = pagination.click();
+				if (StringUtils.equals(("javascript:__doPostBack('gv대여내역','Page$" + (idx % 10 == 0 ? idx / 10 : idx / 10 + 1) + "')"), anchor.getHrefAttribute())) {
+					System.out.println("test=== " + anchor.getHrefAttribute());
+					rentalPage = anchor.click();
 					Thread.sleep(3000);
+					break;
 				}
 			}
 
-			HtmlAnchor cancel = rentalPage.getAnchorByHref("javascript:__doPostBack('gv대여내역$ctl0" + (idx % 10 + 1) + "$btnDelete','')");
+			HtmlAnchor cancel = rentalPage.getAnchorByHref("javascript:__doPostBack('gv대여내역$ctl" + String.format("%02d", (idx % 10 == 0 ? 10 : idx % 10) + 1) + "$btnDelete','')");
 			cancel.click();
 			Thread.sleep(3000);
 

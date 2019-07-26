@@ -49,10 +49,17 @@ public class LectureRoomInfoService {
 
 	public List<LectureRoom> classRoomList(HtmlPage rentalPage) {
 		try {
+			int pageCount = 1;
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("javascript:__doPostBack('gv시설목록','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
+					rentalPage = anchor.click();
+					Thread.sleep(3000);
+					break;
+				}
+			}
+
 			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
 			List<LectureRoom> lectureRooms = new ArrayList<>();
-
-			int pageCount = 1;
 			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
 				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
 					if (lectureRoomsTable.getRow(i).getTextContent().contains(Integer.toString(pageCount + 1))) {
