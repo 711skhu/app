@@ -48,28 +48,31 @@ public class LectureRoomInfoService {
 	}
 
 	public List<LectureRoom> classRoomList(HtmlPage rentalPage) {
-		HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
-		List<LectureRoom> lectureRooms = new ArrayList<>();
-		int pageCount = 1;
-
 		try {
+			int pageCount = 1;
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("javascript:__doPostBack('gv시설목록','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
+					rentalPage = anchor.click();
+					Thread.sleep(3000);
+					break;
+				}
+			}
+
+			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+			List<LectureRoom> lectureRooms = new ArrayList<>();
 			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
 				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
-					for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-						if (anchor.asText().equals(Integer.toString(pageCount + 1))) {
-							rentalPage = anchor.click();
-							Thread.sleep(3000);
-							++pageCount;
-							i = 1;
-							lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
-							break;
-						}
-					}
-					if (i != 1) {
+					if (lectureRoomsTable.getRow(i).getTextContent().contains(Integer.toString(pageCount + 1))) {
+						HtmlAnchor pagination = rentalPage.getAnchorByHref("javascript:__doPostBack('gv시설목록','Page$" + (++pageCount) + "')");
+						rentalPage = pagination.click();
+						Thread.sleep(3000);
+						lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+						i = 0;
+						continue;
+					} else {
 						break;
 					}
 				}
-
 				String classroomName = lectureRoomsTable.getCellAt(i, 0).asText();
 				int people = Integer.parseInt(lectureRoomsTable.getCellAt(i, 2).asText());
 				ClassroomType classroomType = ClassroomType.valudOfClassroomName(classroomName);
