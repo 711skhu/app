@@ -32,53 +32,44 @@ public class LectureRentalInfoService {
 		}
 
 		try {
-			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
-			boolean classroomCheck = false;
-
-			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
-				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
-					for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-						if (anchor.asText().equals("1") || anchor.asText().equals("2")) {
-							rentalPage = anchor.click();
-							Thread.sleep(3000);
-							break;
-						}
-					}
-				}
-
-				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
-					classroomCheck = true;
+			int pageCount = 1;
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("javascript:__doPostBack('gv시설목록','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
+					rentalPage = anchor.click();
+					Thread.sleep(3000);
 					break;
 				}
 			}
 
-			if (!classroomCheck) {
-				lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
-				for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
-					if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
-						break;
-					}
-
-					if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
-						classroomCheck = true;
+			HtmlTable lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+			ClassroomType type = null;
+			for (int i = 1; i < lectureRoomsTable.getRowCount(); i++) {
+				if (lectureRoomsTable.getRow(i).getChildElementCount() == 1) {
+					if (lectureRoomsTable.getRow(i).getTextContent().contains(Integer.toString(pageCount + 1))) {
+						HtmlAnchor pagination = rentalPage.getAnchorByHref("javascript:__doPostBack('gv시설목록','Page$" + (++pageCount) + "')");
+						rentalPage = pagination.click();
+						Thread.sleep(3000);
+						lectureRoomsTable = (HtmlTable) rentalPage.getElementById("gv시설목록");
+						i = 0;
+						continue;
+					} else {
 						break;
 					}
 				}
+
+				if (lectureRoomsTable.getCellAt(i, 0).asText().equals(classroomNumber)) {
+					type = ClassroomType.valudOfClassroomName(classroomNumber);
+					break;
+				}
 			}
 
-			ClassroomType type = ClassroomType.valudOfClassroomName(classroomNumber);
 			if (type == null) {
 				throw new InvalidParameterException("존재하지 않는 강의실 입니다.");
-			} else if (!classroomCheck) {
-				throw new InvalidParameterException("건물이 일치하지 않는 강의실 입니다.");
 			}
 
-			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
-				if (StringUtils.equals(type.getButton(), anchor.getId())) {
-					rentalPage = anchor.click();
-					Thread.sleep(3000);
-				}
-			}
+			HtmlAnchor classroomAnchor = rentalPage.getAnchorByHref("javascript:__doPostBack('" + type.getButton().replace('_', '$') + "','')");
+			rentalPage = classroomAnchor.click();
+			Thread.sleep(3000);
 
 			HtmlInput rentalDateInput = (HtmlInput) rentalPage.getElementById("txtRentDt");
 			rentalDateInput.setValueAttribute(rentalDate);
@@ -96,21 +87,49 @@ public class LectureRentalInfoService {
 	}
 
 	public List<LectureRentalInfo> getRentalList(HtmlPage rentalPage) {
-		List<LectureRentalInfo> rentalList = new ArrayList<>();
-		HtmlTable rentalListTable = (HtmlTable) rentalPage.getElementById("gv시설대여현황");
-		int index = 1;
-
-		for (int i = 1; i < rentalListTable.getRowCount(); i++) {
-			if (!rentalListTable.getCellAt(i, 2).asText().equals("제한")) {
-				String rentalState = rentalListTable.getCellAt(i, 0).asText();
-				String rowRentalDate = rentalListTable.getCellAt(i, 1).asText();
-
-				RentalDate rentalDate = new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)) + 1, LocalDate.parse(rowRentalDate.substring(0, 10)));
-
-				rentalList.add(new LectureRentalInfo(index++, rentalState, rentalDate));
+		try {
+			int pageCount = 1;
+			for (HtmlAnchor anchor : rentalPage.getAnchors()) {
+				if (StringUtils.equals(("javascript:__doPostBack('gv시설대여현황','Page$" + pageCount + "')"), anchor.getHrefAttribute())) {
+					rentalPage = anchor.click();
+					Thread.sleep(3000);
+					break;
+				}
 			}
-		}
 
-		return rentalList;
+			List<LectureRentalInfo> rentalList = new ArrayList<>();
+			HtmlTable rentalListTable = (HtmlTable) rentalPage.getElementById("gv시설대여현황");
+			int index = 0;
+			for (int i = 1; i < rentalListTable.getRowCount(); i++) {
+				if (rentalListTable.getRow(i).getChildElementCount() == 1) {
+					if (rentalListTable.getRow(i).getTextContent().contains(Integer.toString(pageCount + 1))) {
+						HtmlAnchor pagination = rentalPage.getAnchorByHref("javascript:__doPostBack('gv시설대여현황','Page$" + (++pageCount) + "')");
+						rentalPage = pagination.click();
+						Thread.sleep(3000);
+						rentalListTable = (HtmlTable) rentalPage.getElementById("gv시설대여현황");
+						i = 0;
+						continue;
+					} else {
+						break;
+					}
+				}
+
+				if (!rentalListTable.getCellAt(i, 2).asText().equals("제한")) {
+					String rentalState = rentalListTable.getCellAt(i, 0).asText();
+					String rowRentalDate = rentalListTable.getCellAt(i, 1).asText();
+
+					RentalDate rentalDate = new RentalDate(Integer.parseInt(rowRentalDate.substring(11, 13)), Integer.parseInt(rowRentalDate.substring(30, 32)) + 1, LocalDate.parse(rowRentalDate.substring(0, 10)));
+
+					rentalList.add(new LectureRentalInfo(++index, rentalState, rentalDate));
+				}
+			}
+
+			return rentalList;
+		} catch (IOException e) {
+			return ExceptionUtils.rethrow(e);
+		} catch (InterruptedException e) {
+			return ExceptionUtils.rethrow(e);
+		}
 	}
+
 }

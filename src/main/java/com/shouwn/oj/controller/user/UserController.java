@@ -67,4 +67,16 @@ public class UserController {
 				.build();
 	}
 
+	@PreAuthorize("isAuthenticated()")
+	@DeleteMapping("rental/{idx}")
+	public ApiResponse<?> rentalCancel(@PathVariable(value = "idx") int idx, HttpSession session) {
+		HtmlPage rentalPage = (HtmlPage) session.getAttribute("rentalPage");
+
+		userRentalListService.rentalCancel(rentalPage, idx);
+
+		return CommonResponse.builder()
+				.status(HttpStatus.OK)
+				.message("사용자 대여 목록 삭제 성공")
+				.build();
+	}
 }
