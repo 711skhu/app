@@ -46,15 +46,11 @@ public class StudentAuthController {
 		}
 
 		String token = jwtProvider.generateJwt(tokenContext);
-		String refreshToken = reissueTokenRequest.getRefreshToken();
 
 		return CommonResponse.builder()
 				.status(HttpStatus.CREATED)
 				.message("토큰 재발급 완료")
-				.data(new ApiDataBuilder()
-						.addData("token", token)
-						.addData("refreshToken", refreshToken)
-						.packaging())
+				.data(new ApiDataBuilder().addData("token", token).packaging())
 				.build();
 	}
 
